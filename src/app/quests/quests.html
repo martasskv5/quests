@@ -1,9 +1,9 @@
 <main>
     @for (quest of quests; track $index) {
     <div class="quest-card">
-        <h2>{{ quest.title }}</h2>
+        <h2>{{ $index + 1 }}. {{ quest.title }}</h2>
         <p>{{ quest.description }}</p>
         <p>Status: {{ quest.completed ? 'Completed' : 'In Progress' }}</p>
     </div>
-}
+    }
 </main>

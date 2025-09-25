@@ -69,6 +69,9 @@ importers:
       karma-jasmine-html-reporter:
         specifier: ~2.1.0
         version: 2.1.0(jasmine-core@5.9.0)(karma-jasmine@5.1.0(karma@6.4.4))(karma@6.4.4)
+      semver:
+        specifier: ^7.7.2
+        version: 7.7.2
       typescript:
         specifier: ~5.9.2
         version: 5.9.2
