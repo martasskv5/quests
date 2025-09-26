@@ -1,22 +1,48 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component } from '@angular/core';
+import { Card } from './card/card';
 
-type Quest = {
-    title: string;
-    description: string;
-    completed: boolean;
+export type Quest = {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
 };
 
 @Component({
   selector: 'app-quests',
   standalone: true,
-  imports: [],
+  imports: [Card],
   templateUrl: './quests.html',
-  styleUrls: ['./quests.scss']
+  styleUrls: ['./quests.scss'],
 })
 export class Quests {
-    quests: Quest[] = [
-        { title: 'Find the Lost Sword', description: 'Retrieve the legendary sword from the ancient ruins.', completed: false },
-        { title: 'Rescue the Villagers', description: 'Save the villagers captured by goblins.', completed: true },
-        { title: 'Collect Herbs', description: 'Gather 10 healing herbs for the village healer.', completed: false }
-    ];
+  quests: Quest[] = [
+    {
+      id: 1,
+      title: 'Find the Lost Sword',
+      description: 'Retrieve the legendary sword from the ancient ruins.',
+      completed: false,
+    },
+    {
+      id: 2,
+      title: 'Rescue the Villagers',
+      description: 'Save the villagers captured by goblins.',
+      completed: true,
+    },
+    {
+      id: 3,
+      title: 'Collect Herbs',
+      description: 'Gather 10 healing herbs for the village healer.',
+      completed: false,
+    },
+  ];
+  questFormVisible = false;
+  showQuestForm() {
+    // Logic to show the quest creation form
+    this.questFormVisible = !this.questFormVisible;
+  }
+  deleteQuest(index: number) {
+    this.quests.splice(index, 1);
+  }
 }

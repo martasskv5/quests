@@ -1,9 +1,22 @@
 <main>
     @for (quest of quests; track $index) {
-    <div class="quest-card">
-        <h2>{{ $index + 1 }}. {{ quest.title }}</h2>
-        <p>{{ quest.description }}</p>
-        <p>Status: {{ quest.completed ? 'Completed' : 'In Progress' }}</p>
+    <app-card [questData]="quest" (deleteQuest)="deleteQuest($event)"></app-card>
+    }
+    <div class="new-quest" id="new-quest" (click)="showQuestForm()">+</div>
+
+    @if (questFormVisible) {
+    <div class="quest-form">
+        <h2>New Quest - {{ quests.length + 1 }}</h2>
+        <form>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <button type="submit">Add Quest</button>
+            <button type="button" (click)="showQuestForm()">Cancel</button>
+        </form>
     </div>
     }
 </main>

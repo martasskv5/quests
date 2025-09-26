@@ -1,0 +1,6 @@
+<div class="quest-card">
+    <h2>{{ quest().id }}. {{ quest().title }}</h2>
+    <p>{{ quest().description }}</p>
+    <p>Status: {{ quest().completed ? 'Completed' : 'In Progress' }}</p>
+    <div class="delete" (click)="deleteQuest.emit(quest().id)">🗑️</div>
+</div>
