@@ -1,5 +1,14 @@
 <div class="quest-card">
-    <h2>{{ quest().id }}. {{ quest().title }}</h2>
+    <div class="quest-header">
+            <h2>{{ quest().id }}. {{ quest().title }}</h2>
+            <span
+            [ngClass]="{
+                `green`: quest().xp < 100,
+                `yellow`: quest().xp >= 100 && quest().xp < 200,
+                `red`: quest().xp >= 200
+            }"
+            >XP: {{ quest().xp }}</span>
+        </div>
     <p>{{ quest().description }}</p>
     <p>Status: {{ quest().completed ? 'Completed' : 'In Progress' }}</p>
     <div class="delete" (click)="deleteQuest.emit(quest().id)">🗑️</div>
