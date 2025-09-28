@@ -1,46 +1,46 @@
 .quest-card {
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  .delete {
-    cursor: pointer;
-    color: red;
-    float: right;
-  }
-
-  .quest-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-
-    h2 {
-      margin: 0;
-      font-size: 1.25rem;
+    .delete {
+        cursor: pointer;
+        color: red;
+        float: right;
     }
 
-    span {
-      background-color: #f0f0f0;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      color: #333;
+    .quest-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
 
-      &.green {
-        background-color: #d4edda;
-        color: #155724;
-      }
-      &.yellow {
-        background-color: #fff3cd;
-        color: #856404;
-      }
-      &.red {
-        background-color: #f8d7da;
-        color: #721c24;
-      }
+        h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        span {
+            background-color: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #333;
+
+            &.green {
+                background-color: #d4edda;
+                color: #155724;
+            }
+            &.yellow {
+                background-color: #fff3cd;
+                color: #856404;
+            }
+            &.red {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+        }
     }
-  }
 }

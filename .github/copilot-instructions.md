@@ -21,7 +21,7 @@ export class {{ClassName}} {
 }
 ```
 
-```css
+```scss
 .container {
     display: flex;
     flex-direction: column;
@@ -101,3 +101,41 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+---
+
+# SCSS Rules
+
+## Naming Conventions
+- Use BEM (Block__Element--Modifier) for class names.
+- Class names must be lowercase, with hyphens only.
+- Variables must be written in kebab-case with a `$` prefix (e.g., $primary-color).
+
+## Formatting
+- Indent with 4 spaces, never tabs.
+- Nest selectors to a maximum depth of 3 levels.
+- Place closing braces on a new line.
+- Always include a newline at the end of files.
+
+## Colors & Values
+- Use CSS custom properties (`--var`) or SCSS variables instead of hard-coded values.
+- Prefer HSL or HEX over RGB.
+- Define a variables file (`_variables.scss`) for colors, spacing, typography.
+
+## Mixins & Extends
+- Prefer mixins with arguments over `@extend` to avoid selector bloat.
+- Create utility mixins for common patterns (media queries, flex, grid).
+
+## Organization
+<!-- - Use partials (`_filename.scss`) and import them into `main.scss`. -->
+- Group styles: variables → mixins → base → layout → components → utilities.
+- Always include comments above sections with `///` for clarity.
+
+## Performance & Maintainability
+- Avoid deep nesting (>3 levels).
+- Avoid `!important` unless absolutely necessary.
+- Use shorthand properties where appropriate (e.g., `margin: 0 auto;`).
+
+---
+
+Dont forget to use available MCP servers, like angular-cli.
