@@ -13,4 +13,10 @@ export class App {
     protected readonly title = signal('quests');
     header = 'Quest Overflow';
     header_logo = 'meteor-original.svg';
+
+    visible = true
+
+    toggle() {
+        this.visible = !this.visible
+    }
 }

@@ -46,7 +46,7 @@ export class {{ClassName}} {
 </section>
 ```
 
-When you update a component, be sure to put the logic in the ts file, the styles in the css file and the html template in the html file.
+When you update a component, be sure to put the logic in the ts file, the styles in the scss file and the html template in the html file.
 
 ## Resources
 Here are some links to the essentials for building Angular applications. Use these to get an understanding of how some of the core functionality works
@@ -120,11 +120,12 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 ## Colors & Values
 - Use CSS custom properties (`--var`) or SCSS variables instead of hard-coded values.
 - Prefer HSL or HEX over RGB.
-- Define a variables file (`_variables.scss`) for colors, spacing, typography.
+- Define a global variables file (`_variables.scss`) for colors, spacing, typography in `scr` directory.
 
 ## Mixins & Extends
 - Prefer mixins with arguments over `@extend` to avoid selector bloat.
 - Create utility mixins for common patterns (media queries, flex, grid).
+- Define a global mixins file (`_mixins.scss`) for mixins in `src` directory.
 
 ## Organization
 <!-- - Use partials (`_filename.scss`) and import them into `main.scss`. -->
@@ -135,6 +136,7 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 - Avoid deep nesting (>3 levels).
 - Avoid `!important` unless absolutely necessary.
 - Use shorthand properties where appropriate (e.g., `margin: 0 auto;`).
+- Use mixins to reduce duplicate code.
 
 ---
 

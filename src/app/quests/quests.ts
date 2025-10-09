@@ -1,13 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Card } from './card/card';
+import { Quest, QuestsService } from '../quests.service';
 
-export type Quest = {
-    id: number;
-    title: string;
-    description: string;
-    completed: boolean;
-    xp: number;
-};
 
 @Component({
     selector: 'app-quests',
@@ -17,29 +11,7 @@ export type Quest = {
     styleUrls: ['./quests.scss'],
 })
 export class Quests {
-    quests: Quest[] = [
-        {
-            id: 1,
-            title: 'Find the Lost Sword',
-            description: 'Retrieve the legendary sword from the ancient ruins.',
-            completed: false,
-            xp: 100,
-        },
-        {
-            id: 2,
-            title: 'Rescue the Villagers',
-            description: 'Save the villagers captured by goblins.',
-            completed: true,
-            xp: 200,
-        },
-        {
-            id: 3,
-            title: 'Collect Herbs',
-            description: 'Gather 10 healing herbs for the village healer.',
-            completed: false,
-            xp: 50,
-        },
-    ];
+    quests: Quest[] = inject(QuestsService).getQuests();
     questFormVisible = false;
     showQuestForm() {
         // Logic to show the quest creation form
@@ -47,5 +19,12 @@ export class Quests {
     }
     deleteQuest(id: number) {
         this.quests = this.quests.filter((quest) => quest.id !== id);
+    }
+
+    ngOnInit() {
+        console.info("%c Quests component initialized", "color: white; padding: 15px; border: 1px solid green; background-color: green;");
+    }
+    ngOnDestroy() {
+        console.info("%c Quests component destroyed", "color: white; padding: 15px; border: 1px solid red; background-color: red;");
     }
 }

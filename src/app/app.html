@@ -3,6 +3,9 @@
         <img src="{{ header_logo }}" alt="" />
         <h1>{{ header }}</h1>
     </header>
+    <div id="toggle" (click)="toggle()">TOGGLE</div>
     <router-outlet></router-outlet>
-    <app-quests></app-quests>
+    @if (visible) {
+        <app-quests></app-quests>
+    }
 </main>

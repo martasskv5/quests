@@ -10,3 +10,20 @@ header {
         padding-right: 1%;
     }
 }
+
+#toggle {
+    width: 150px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0078d4;
+    color: white;
+    border: black 2px solid;
+    border-radius: 14px;
+    font-size: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+}
