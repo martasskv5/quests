@@ -1,10 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Quests } from './quests/quests';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, Quests],
+    imports: [RouterOutlet],
     standalone: true,
     templateUrl: './app.html',
     styleUrls: ['./app.scss'],
@@ -14,9 +13,9 @@ export class App {
     header = 'Quest Overflow';
     header_logo = 'meteor-original.svg';
 
-    visible = true
+    // visible = true
 
-    toggle() {
-        this.visible = !this.visible
-    }
+    // toggle() {
+    //     this.visible = !this.visible
+    // }
 }
