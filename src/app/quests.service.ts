@@ -13,9 +13,12 @@ export type Quest = {
 })
 export class QuestsService {
     constructor() {
-        console.info('%c QuestsService initialized', "color: white; padding: 15px; border: 1px solid blue; background-color: blue;");
+        console.info(
+            '%c QuestsService initialized',
+            'color: white; padding: 15px; border: 1px solid blue; background-color: blue;'
+        );
     }
-    
+
     private quests: Quest[] = [
         {
             id: 1,
@@ -39,8 +42,12 @@ export class QuestsService {
             xp: 50,
         },
     ];
-    
+
     getQuests(): Quest[] {
         return this.quests;
+    }
+
+    getQuestById(id: number): Quest {
+        return this.quests.find((quest) => quest.id === id) as Quest;
     }
 }

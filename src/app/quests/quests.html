@@ -1,6 +1,8 @@
 <main>
-    @for (quest of quests; track $index) {
-    <app-card [questData]="quest" (deleteQuest)="deleteQuest($event)"></app-card>
+    <h2>Total Quests: {{ quests().length }}</h2>
+
+    @for (quest of quests(); track $index) {
+    <app-card [questData]="quest" (deleteQuest)="deleteQuest($event)" [routerLink]="[quest.id]"></app-card>
     }
     <div class="new-quest" id="new-quest" (click)="showQuestForm()">+</div>
 

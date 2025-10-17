@@ -12,5 +12,13 @@
     </div>
     <p>{{ quest().description }}</p>
     <p>Status: {{ quest().completed ? 'Completed' : 'In Progress' }}</p>
-    <div class="delete" (click)="deleteQuest.emit(quest().id)">🗑️</div>
+    <div
+        class="delete"
+        role="button"
+        tabindex="0"
+        aria-label="Delete quest"
+        (click)="handleDelete($event)"
+        (keydown.enter)="handleDelete($event)"
+        (keydown.space)="$event.preventDefault(); handleDelete($event)"
+    >🗑️</div>
 </div>

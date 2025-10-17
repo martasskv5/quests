@@ -2,6 +2,8 @@
     <header>
         <img src="{{ header_logo }}" alt="" />
         <h1>{{ header }}</h1>
+        <a [routerLink]="[``]">Home</a>
+        <a [routerLink]="[`quests`]">Quests</a>
     </header>
     <router-outlet></router-outlet>
     <!-- <div id="toggle" (click)="toggle()">TOGGLE</div> -->

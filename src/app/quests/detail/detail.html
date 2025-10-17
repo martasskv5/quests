@@ -1,0 +1,8 @@
+<main>
+    <h1>Quest Detail</h1>
+    <h3>{{ quest.title }}</h3>
+    <p>{{ quest.description }}</p>
+    <p>XP: {{ quest.xp }}</p>
+    <p>Status: {{ quest.completed ? 'Completed' : 'In Progress' }}</p>
+    <a [routerLink]="['/quests']">BACK</a>
+</main>
