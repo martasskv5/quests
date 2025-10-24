@@ -1,6 +1,7 @@
-import { Component, computed, inject, Signal, WritableSignal, signal } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal, signal, Input } from '@angular/core';
 import { Card } from './card/card';
-import { Quest, QuestsService } from '../quests.service';
+import { QuestsService } from '../quests.service';
+import { Quest } from '../modules';
 import { RouterModule } from "@angular/router";
 
 
@@ -12,18 +13,31 @@ import { RouterModule } from "@angular/router";
     styleUrls: ['./quests.scss'],
 })
 export class Quests {
-    questsData: WritableSignal<Quest[]> = signal(inject(QuestsService).getQuests());
-    quests: Signal<Quest[]> = computed(() => this.questsData());
+    @Input() questsData: Signal<Quest[]> = signal([]);
+
+
+    // Use a writable local signal so we can call update() on it
+    quests: WritableSignal<Quest[]> = signal([]);
     questFormVisible = false;
     showQuestForm() {
         // Logic to show the quest creation form
         this.questFormVisible = !this.questFormVisible;
     }
     deleteQuest(id: number) {
-        this.questsData.update(quests => quests.filter((quest) => quest.id !== id));
+        this.quests.update(quests => quests.filter((quest) => quest.id !== id));
+    }
+    completeQuest(id: number) {
+        this.quests.update(quests => quests.map((quest) => {
+            if (quest.id === id) {
+                quest.completed = true;
+            }
+            return quest;
+        }));
     }
 
     ngOnInit() {
+        // Initialize the writable signal from the input signal value
+        this.quests.set(this.questsData());
         console.info("%c Quests component initialized", "color: white; padding: 15px; border: 1px solid green; background-color: green;");
     }
     ngOnDestroy() {

@@ -1,0 +1,12 @@
+<main>
+    <h1>Add New Player</h1>
+
+    <form (ngSubmit)="createPlayer()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" [(ngModel)]="username" name="name" required>
+
+        <button type="submit">Add Player</button>
+    </form>
+
+    <div class="back" [routerLink]="[`/players`]">Back</div>
+</main>

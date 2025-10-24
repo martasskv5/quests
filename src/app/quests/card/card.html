@@ -21,4 +21,5 @@
         (keydown.enter)="handleDelete($event)"
         (keydown.space)="$event.preventDefault(); handleDelete($event)"
     >🗑️</div>
+    <div class="complete" role="button" tabindex="0" aria-label="Complete quest" (click)="handleComplete($event)" (keydown.enter)="handleComplete($event)" (keydown.space)="$event.preventDefault(); handleComplete($event)">✅</div>
 </div>

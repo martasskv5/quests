@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { computed } from '@angular/core';
-import { Quest } from '../../quests.service';
+import { Quest } from '../../modules';
 
 @Component({
     selector: 'app-card',
@@ -14,6 +14,7 @@ export class Card {
     quest = computed(() => this.questData);
 
     @Output() deleteQuest = new EventEmitter<number>();
+    @Output() completeQuest = new EventEmitter<number>();
 
     handleDelete(event: Event) {
         event.stopPropagation();
@@ -21,6 +22,13 @@ export class Card {
             console.log(this.quest().id);
             
             this.deleteQuest.emit(this.quest().id);
+        }
+    }
+
+    handleComplete(event: Event) {
+        event.stopPropagation();
+        if (this.quest().id != null) {
+            this.completeQuest.emit(this.quest().id);
         }
     }
 }

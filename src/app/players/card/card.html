@@ -1,0 +1,25 @@
+<div class="quest-card">
+    <div class="quest-header">
+        <h2>{{ player().id }}. {{ player().username }}</h2>
+    </div>
+    <!-- <p>Quests list: {{ player().questsList}}</p> -->
+    <!-- @for (quest of player().questsList; track $index) {
+        <app-card [questData]="quest" [routerLink]="[`/quests`, quest.id]"></app-card>
+    } -->
+    <div class="quest-body">
+        @if (player().clan) {
+            <p>Clan: {{ player().clan }}</p>
+        } @else {
+            <p>No clan</p>
+        }
+    </div>
+    <div
+        class="delete"
+        role="button"
+        tabindex="0"
+        aria-label="Delete quest"
+        (click)="handleDelete($event)"
+        (keydown.enter)="handleDelete($event)"
+        (keydown.space)="$event.preventDefault(); handleDelete($event)"
+    >🗑️</div>
+</div>

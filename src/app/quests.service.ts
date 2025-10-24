@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export type Quest = {
-    id: number;
-    title: string;
-    description: string;
-    completed: boolean;
-    xp: number;
-};
+import { Quest } from './modules';
 
 @Injectable({
     providedIn: 'root',
@@ -41,6 +34,20 @@ export class QuestsService {
             completed: false,
             xp: 50,
         },
+        {
+            id: 4,
+            title: 'Defeat the Dragon',
+            description: 'Slay the dragon terrorizing the village.',
+            completed: false,
+            xp: 500,
+        },
+        {
+            id: 5,
+            title: 'Explore the Cave',
+            description: 'Investigate the mysterious cave near the village.',
+            completed: true,
+            xp: 150,
+        }
     ];
 
     getQuests(): Quest[] {

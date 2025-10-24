@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { Quest, QuestsService } from '../../quests.service';
+import { QuestsService } from '../../quests.service';
+import { Quest } from '../../modules';
 
 @Component({
   selector: 'app-detail',
