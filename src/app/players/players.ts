@@ -11,5 +11,11 @@ import { RouterLink } from "@angular/router";
   styleUrl: './players.scss'
 })
 export class Players {
-    playersData: WritableSignal<Player[]> = signal(inject(PlayersService).getPlayers());
+    playersService = inject(PlayersService);
+    playersData: WritableSignal<Player[]> = signal(this.playersService.getPlayers());
+
+    handleDeletePlayer(username: string) {
+        this.playersService.deletePlayerByUsername(username);
+        this.playersData.set(this.playersService.getPlayers());
+    }
 }

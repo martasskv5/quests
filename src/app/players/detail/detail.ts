@@ -27,4 +27,8 @@ export class Detail {
             return quest;
         });
     }
+
+    deleteQuest(id: number) {
+        this.player.questsList = this.player.questsList.filter((quest) => quest.id !== id);
+    }
 }

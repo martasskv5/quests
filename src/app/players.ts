@@ -42,4 +42,8 @@ export class PlayersService {
     getPlayerByUsername(username: string): Player {
         return this.players.find((player) => player.username === username) as Player;
     }
+
+    deletePlayerByUsername(username: string): void {
+        this.players = this.players.filter((player) => player.username !== username);
+    }
 }
