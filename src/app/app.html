@@ -1,8 +1,9 @@
 <main>
     <header>
-        <img src="{{ header_logo }}" alt="" />
-        <h1>{{ header }}</h1>
-        <a [routerLink]="[``]">Home</a>
+        <div [routerLink]="[``]">
+            <img src="{{ header_logo }}" alt="" />
+            <h1>{{ header }}</h1>
+        </div>
         <a [routerLink]="[`quests`]">Quests</a>
         <a [routerLink]="[`players`]">Players</a>
         <a [routerLink]="[`clans`]">Clans</a>

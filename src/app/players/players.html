@@ -1,7 +1,8 @@
 <main>
-    <div id="addPlayer" [routerLink]="[`new`]">Add new player</div>
-
+    
     @for (player of playersData(); track $index) {
         <app-player-card [playerData]="player" [routerLink]="[player.username]" (deletePlayer)="handleDeletePlayer($event)"></app-player-card>
     }
+    
+    <div id="addPlayer" class="new" [routerLink]="[`new`]">+</div>
 </main>

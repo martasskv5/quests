@@ -1,14 +1,21 @@
 <main>
-    <h1>{{player.username}}`s Profile</h1>
-    <p>Level: {{player.level}}</p>
-    @if (player.clan) {
-        <p [routerLink]="[`/clans`, player.clan.name]">Clan: {{player.clan.name}}</p>
-    } @else {
+    <div class="card">
+        <h1>{{ player.username }}`s Profile</h1>
+        <p>Level: {{ player.level }}</p>
+        @if (player.clan) {
+        <p [routerLink]="[`/clans`, player.clan.name]">Clan: {{ player.clan.name }}</p>
+        } @else {
         <p>No clan</p>
-    }
-    <img [src]="player.profilePictureUrl" alt="{{player.username}}'s Profile Picture">
+        }
+        <img [src]="player.profilePictureUrl" alt="{{ player.username }}'s Profile Picture" />
 
-    @for (quest of player.questsList; track $index) {
-        <app-card [questData]="quest" [routerLink]="[`/quests`, quest.id]" (completeQuest)="completeQuest($event)" (deleteQuest)="deleteQuest($event)"></app-card>
-    }
+        @for (quest of player.questsList; track $index) {
+        <app-card
+            [questData]="quest"
+            [routerLink]="[`/quests`, quest.id]"
+            (completeQuest)="completeQuest($event)"
+            (deleteQuest)="deleteQuest($event)"
+        ></app-card>
+        }
+    </div>
 </main>

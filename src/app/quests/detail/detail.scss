@@ -1,29 +1,4 @@
-main {
-    padding: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
+@import "../../../styles.scss";
 
-    h2 {
-        margin-top: 0;
-    }
-
-    h3 {
-        margin-bottom: 8px;
-    }
-
-    p {
-        margin: 4px 0;
-    }
-
-    a {
-        display: inline-block;
-        margin-top: 16px;
-        text-decoration: none;
-        color: #007bff;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-}
+@include main;
+@include card;

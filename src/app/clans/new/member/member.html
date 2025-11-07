@@ -2,7 +2,7 @@
     @if (clan) {
         <h1>Add New Member to Clan: {{ clan?.name }}</h1>
 
-        <form (ngSubmit)="addMember()" #memberForm="ngForm">
+        <form class="form" (ngSubmit)="addMember()" #memberForm="ngForm">
             <label for="username">Player Username:</label>
             <!-- <input type="text" id="username" name="username" required [(ngModel)]="username" /> -->
             <select id="username" name="username" required [(ngModel)]="username">

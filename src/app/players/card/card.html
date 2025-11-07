@@ -1,12 +1,8 @@
-<div class="quest-card">
-    <div class="quest-header">
+<div class="card">
+    <div class="header">
         <h2>{{ player().id }}. {{ player().username }}</h2>
     </div>
-    <!-- <p>Quests list: {{ player().questsList}}</p> -->
-    <!-- @for (quest of player().questsList; track $index) {
-        <app-card [questData]="quest" [routerLink]="[`/quests`, quest.id]"></app-card>
-    } -->
-    <div class="quest-body">
+    <div class="body">
         @if (player().clan) {
             <p>Clan: {{ player().clan?.name }}</p>
         } @else {
