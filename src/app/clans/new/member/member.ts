@@ -37,14 +37,19 @@ export class NewMember {
     playerClan: Clan = this.clan!;
 
     addMember() {
-        const newMember: Player = {
-            id: this.id,
-            username: this.username,
-            level: this.level,
-            profilePictureUrl: this.profilePictureUrl,
-            clan: this.playerClan,
-            questsList: []
-        };
+        const newMember: Player = this.playerService.getPlayerByUsername(this.username);
+        if (!newMember) {
+            console.error('Player not found');
+            return;
+        }
+        if (this.clan!.players.length >= this.clan!.capacity) {
+            alert('Clan is at full capacity!');
+            return;
+        }
+        if (newMember.clan) {
+            alert('Player is already in a clan!');
+            return;
+        }
 
         // Call the service to add the new player
         this.clanService.addPlayerToClan(this.clan!.name, newMember);

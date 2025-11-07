@@ -6,10 +6,11 @@
     </div>
     <h1>Clan: {{ clan.name }}</h1>
     <p>Description: {{ clan.description }}</p>
+    <p>Capacity: {{ clan.capacity }}</p>
     <p>Members:</p>
     <ul>
         @for (member of clan.players; track $index) {
-        <li>{{ member.username }}</li>
+        <li [routerLink]="[`/players`, member.username]">{{ member.username }}</li>
         <div
             class="delete"
             role="button"
