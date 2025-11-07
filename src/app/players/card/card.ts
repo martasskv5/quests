@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-player-card',
-  imports: [QuestsCard, RouterModule],
+  imports: [RouterModule],
   templateUrl: './card.html',
   styleUrl: './card.scss'
 })

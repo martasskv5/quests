@@ -1,0 +1,5 @@
+<div [routerLink]="[`new`]">Add Clan</div>
+
+@for (clan of clansData(); track $index) {
+    <app-clans-card [clanData]="clan" (deleteClan)="handleDeleteClan($event)" [routerLink]="[clan.name]"></app-clans-card>
+}

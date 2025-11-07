@@ -1,0 +1,29 @@
+<main>
+    @if (clan) {
+    <div [routerLink]="[`member`]">
+        Add New Member or
+        <div [routerLink]="[`/players/new`]">Create New Player</div>
+    </div>
+    <h1>Clan: {{ clan.name }}</h1>
+    <p>Description: {{ clan.description }}</p>
+    <p>Members:</p>
+    <ul>
+        @for (member of clan.players; track $index) {
+        <li>{{ member.username }}</li>
+        <div
+            class="delete"
+            role="button"
+            tabindex="0"
+            aria-label="Delete quest"
+            (click)="handleDelete(member.username)"
+            (keydown.enter)="handleDelete(member.username)"
+            (keydown.space)="$event.preventDefault(); handleDelete(member.username)"
+        >
+            🗑️
+        </div>
+        }
+    </ul>
+    } @else {
+    <p>Clan not found.</p>
+    }
+</main>

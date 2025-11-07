@@ -1,0 +1,20 @@
+<main>
+    @if (clan) {
+        <h1>Add New Member to Clan: {{ clan?.name }}</h1>
+
+        <form (ngSubmit)="addMember()" #memberForm="ngForm">
+            <label for="username">Player Username:</label>
+            <!-- <input type="text" id="username" name="username" required [(ngModel)]="username" /> -->
+            <select id="username" name="username" required [(ngModel)]="username">
+                @for (player of avaiblePlayers; track $index) {
+                    <option value="{{ player.username }}">{{ player.username }}</option>
+                }
+            </select>
+
+            <button type="submit">Add Member</button>
+        </form>
+    }
+    @else {
+        <h1>Invalid Clan</h1>
+    }
+</main>

@@ -1,17 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Player } from './modules';
+import { Injectable, inject } from '@angular/core';
+import { Player, Clan } from './modules';
+import { ClanService } from './clans';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PlayersService {
+    private clanService = inject(ClanService);
     private players: Player[] = [
         {
             id: 1,
             username: 'Hero123',
             level: 10,
-            // clan: 'Warriors',
-            // profilePictureUrl: 'assets/profiles/hero123.png',
+            clan: this.clanService.getClanByName('Warriors'),
+            profilePictureUrl: undefined,
             questsList: [
                 {
                     id: 1,

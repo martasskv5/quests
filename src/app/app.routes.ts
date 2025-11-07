@@ -5,6 +5,10 @@ import { Detail } from './quests/detail/detail';
 import { Players } from './players/players';
 import { New as NewPlayer } from './players/new/new';
 import { Detail as PlayerDetail } from './players/detail/detail';
+import { Clans } from './clans/clans';
+import { ClanDetail } from './clans/detail/detail';
+import { ClanNew } from './clans/new/new';
+import { NewMember } from './clans/new/member/member';
 
 
 export const routes: Routes = [
@@ -14,4 +18,8 @@ export const routes: Routes = [
     { path: "players", component: Players },
     { path: "players/new", component: NewPlayer },
     { path: "players/:username", component: PlayerDetail },
+    { path: "clans", component: Clans },
+    { path: "clans/new", component: ClanNew },
+    { path: "clans/:name", component: ClanDetail },
+    { path: "clans/:name/member", component: NewMember },
 ];
