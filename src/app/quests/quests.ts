@@ -13,7 +13,8 @@ import { RouterModule } from "@angular/router";
     styleUrls: ['./quests.scss'],
 })
 export class Quests {
-    @Input() questsData: Signal<Quest[]> = signal([]);
+    questsService = inject(QuestsService);
+    @Input() questsData: Signal<Quest[]> = signal(this.questsService.getQuests());
 
 
     // Use a writable local signal so we can call update() on it

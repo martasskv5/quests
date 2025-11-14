@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './home/home';
 import { Quests } from './quests/quests';
+import { New as NewQuest } from './quests/new/new';
 import { Detail } from './quests/detail/detail';
 import { Players } from './players/players';
 import { New as NewPlayer } from './players/new/new';
@@ -14,6 +15,7 @@ import { NewMember } from './clans/new/member/member';
 export const routes: Routes = [
     { path: '', component: Home },
     { path: 'quests', component: Quests },
+    { path: 'quests/new', component: NewQuest },
     { path: 'quests/:id', component: Detail },
     { path: "players", component: Players },
     { path: "players/new", component: NewPlayer },

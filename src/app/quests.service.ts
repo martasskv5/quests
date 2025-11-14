@@ -57,4 +57,8 @@ export class QuestsService {
     getQuestById(id: number): Quest {
         return this.quests.find((quest) => quest.id === id) as Quest;
     }
+
+    addQuest(quest: Quest): void {
+        this.quests.push(quest);
+    }
 }

@@ -49,3 +49,32 @@
 - [x] Ensure players can belong to only one clan.
 - [x] Ensure clan capacity is not exceeded.
 - ~~[ ] Maintain consistency between quests, players, and clans.~~
+
+---
+
+### 16
+- [x] Add new player form with validation.
+- [x] Add new clan form with validation.
+- [x] Add new quest form with validation.
+
+---
+
+### 17
+- [ ] Split player quests into "Completed" and "In Progress" sections.
+- [ ] Add ability to mark quests as completed or in progress for players.
+
+---
+
+### 18
+- [x] Create player level interface
+- [x] Define levels based on experience points or completed quests.
+- [ ] Update player to use xp instead of level directly.
+- [ ] Implement level based on xp thresholds.
+- [ ] Display player level in player details and lists.
+- [ ] In player detail, show progress to next level.
+- Slightly modified: this is in the `modules.ts` file instead `levels.ts`.
+
+---
+
+### 19
+- [ ] Implement search functionality for players based on PlayerLevel.

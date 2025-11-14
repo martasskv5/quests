@@ -4,9 +4,9 @@
     @for (quest of quests(); track $index) {
     <app-card [questData]="quest" (deleteQuest)="deleteQuest($event)" (completeQuest)="completeQuest($event)" [routerLink]="[quest.id]"></app-card>
     }
-    <div class="new-quest" id="new-quest" (click)="showQuestForm()">+</div>
+    <div class="new-quest" id="new-quest" [routerLink]="[`new`]">+</div>
 
-    @if (questFormVisible) {
+    <!-- @if (questFormVisible) {
     <div class="quest-form">
         <h2>New Quest - {{ quests.length + 1 }}</h2>
         <form>
@@ -20,5 +20,5 @@
             <button type="button" (click)="showQuestForm()">Cancel</button>
         </form>
     </div>
-    }
+    } -->
 </main>
