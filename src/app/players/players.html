@@ -1,6 +1,15 @@
 <main>
+
+    <div class="form">
+        <select name="selectLevel" id="selectLevel" (change)="onLevelChange($any($event.target).value)">
+            <option value="all">All Levels</option>
+            @for (level of playerLevels; track $index) {
+                <option value="{{ level.title }}">{{ level.title }}</option>
+            }
+        </select>
+    </div>
     
-    @for (player of playersData(); track $index) {
+    @for (player of filteredPlayers(); track $index) {
         <app-player-card [playerData]="player" [routerLink]="[player.username]" (deletePlayer)="handleDeletePlayer($event)"></app-player-card>
     }
     
