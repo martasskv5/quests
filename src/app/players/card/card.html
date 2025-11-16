@@ -8,6 +8,7 @@
         } @else {
             <p>No clan</p>
         }
+        <p>Level: {{ playerService.getPlayerLevel(player().username).title }}</p>
     </div>
     <div
         class="delete"

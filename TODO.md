@@ -69,10 +69,10 @@
 ### 18
 - [x] Create player level interface
 - [x] Define levels based on experience points or completed quests.
-- [ ] Update player to use xp instead of level directly.
-- [ ] Implement level based on xp thresholds.
-- [ ] Display player level in player details and lists.
-- [ ] In player detail, show progress to next level.
+- [x] Update player to use xp instead of level directly.
+- [x] Implement level based on xp thresholds.
+- [x] Display player level in player details and lists.
+- [x] In player detail, show progress to next level.
 - Slightly modified: this is in the `modules.ts` file instead `levels.ts`.
 
 ---

@@ -15,7 +15,7 @@ export class New {
 
     playerId: number = Math.floor(Math.random() * 10000) + 1000;
     username: string = '';
-    level: number = 1;
+    xp: number = 0;
     clan: string = '';
     profilePictureUrl: string = '';
     questsList: any[] = [];
@@ -24,7 +24,7 @@ export class New {
         const newPlayer: Player = {
             id: this.playerId,
             username: this.username,
-            level: this.level,
+            xp: this.xp,
             // clan: this.clan,
             profilePictureUrl: this.profilePictureUrl,
             questsList: this.questsList

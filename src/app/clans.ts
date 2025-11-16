@@ -17,7 +17,7 @@ export class ClanService {
                 {
                     id: 1,
                     username: 'Hero123',
-                    level: 10,
+                    xp: 200,
                     profilePictureUrl: undefined,
                     questsList: [
                         {

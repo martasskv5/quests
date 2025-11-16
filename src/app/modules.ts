@@ -9,7 +9,7 @@ export interface Quest {
 export interface Player {
     id: number;
     username: string;
-    level: number;
+    xp: number;
     clan?: Clan;
     profilePictureUrl?: string;
     questsList: Quest[];

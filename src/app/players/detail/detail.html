@@ -1,7 +1,8 @@
 <main>
     <div class="card">
         <h1>{{ player.username }}`s Profile</h1>
-        <p>Level: {{ player.level }}</p>
+        <p>Level: {{ playerService.getPlayerLevel(player.username).title }}</p>
+        <p>Next Level In: {{ getNextLevel().xpRequired - player.xp }} xp</p>
         @if (player.clan) {
         <p [routerLink]="[`/clans`, player.clan.name]">Clan: {{ player.clan.name }}</p>
         } @else {

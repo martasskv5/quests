@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { NgClass } from '@angular/common';
-import { Player } from '../../modules';
+import { Player, playerLevels, PlayerLevel } from '../../modules';
 import { PlayersService } from '../../players';
 import { Card as QuestsCard } from '../../quests/card/card';
 
@@ -14,10 +14,10 @@ import { Card as QuestsCard } from '../../quests/card/card';
 export class Detail {
     route: ActivatedRoute = inject(ActivatedRoute);
     player: Player;
+    playerService: PlayersService = inject(PlayersService);
     constructor() {
         const username = this.route.snapshot.paramMap.get('username');
-        const playersService = inject(PlayersService);
-        this.player = playersService.getPlayerByUsername(String(username));
+        this.player = this.playerService.getPlayerByUsername(String(username));
     }
 
     completeQuest(id: number) {
@@ -32,5 +32,14 @@ export class Detail {
 
     deleteQuest(id: number) {
         this.player.questsList = this.player.questsList.filter((quest) => quest.id !== id);
+    }
+
+    getNextLevel(): PlayerLevel {
+        const currentLevel = this.playerService.getPlayerLevel(this.player.username);
+        const currentLevelIndex = playerLevels.findIndex(level => level.title === currentLevel.title);
+        if (currentLevelIndex >= 0 && currentLevelIndex < playerLevels.length - 1) {
+            return playerLevels[currentLevelIndex + 1];
+        }
+        return playerLevels[0];
     }
 }

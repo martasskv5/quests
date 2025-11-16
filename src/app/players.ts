@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Player, Clan } from './modules';
+import { Player, playerLevels, PlayerLevel } from './modules';
 import { ClanService } from './clans';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class PlayersService {
         {
             id: 1,
             username: 'Hero123',
-            level: 10,
+            xp: 1200,
             clan: this.clanService.getClanByName('Warriors'),
             profilePictureUrl: undefined,
             questsList: [
@@ -35,7 +35,7 @@ export class PlayersService {
                     description: 'Save the princess from the evil warlock.',
                     completed: false,
                     xp: 200,
-                }
+                },
             ],
         },
     ];
@@ -57,6 +57,19 @@ export class PlayersService {
 
     getPlayerByUsername(username: string): Player {
         return this.players.find((player) => player.username === username) as Player;
+    }
+
+    getPlayerLevel(player: string): PlayerLevel {
+        const p = this.getPlayerByUsername(player);
+        let level: PlayerLevel = playerLevels[0];
+        for (const l of playerLevels) {
+            if (p.xp >= l.xpRequired) {
+                level = l;
+            } else {
+                break;
+            }
+        }
+        return level;
     }
 
     deletePlayerByUsername(username: string): void {
