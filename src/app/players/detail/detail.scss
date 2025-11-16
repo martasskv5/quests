@@ -2,3 +2,33 @@
 
 @include main;
 @include card;
+
+/* Place completed quests in left column, in-progress on right.
+   Put this in `src/app/players/detail/detail.scss` or the component scss. */
+.quests-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal columns */
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Ensure the card takes full column width */
+.quests-grid > app-card,
+.quests-grid > .quest-card,
+.quests-grid > .player-card {
+  width: 100%;
+  display: block; /* ensures block-level width in grid cell */
+}
+
+/* Assign column: completed -> column 1, in-progress -> column 2 */
+.quests-grid > .completed {
+  grid-column: 1;
+}
+
+.quests-grid > .in-progress {
+  grid-column: 2;
+}
+
+/* Optional: keep the same vertical order inside each column */
+.quests-grid > .completed { order: 0; }
+.quests-grid > .in-progress { order: 1; }

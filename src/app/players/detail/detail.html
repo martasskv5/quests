@@ -9,13 +9,19 @@
         }
         <img [src]="player.profilePictureUrl" alt="{{ player.username }}'s Profile Picture" />
 
-        @for (quest of player.questsList; track $index) {
-        <app-card
-            [questData]="quest"
-            [routerLink]="[`/quests`, quest.id]"
-            (completeQuest)="completeQuest($event)"
-            (deleteQuest)="deleteQuest($event)"
-        ></app-card>
-        }
+        <div class="quests-grid">
+            @for (quest of player.questsList; track $index) {
+            <app-card
+                [ngClass]="{
+                    `completed`: quest.completed,
+                    `in-progress`: !quest.completed
+                }"
+                [questData]="quest"
+                [routerLink]="[`/quests`, quest.id]"
+                (completeQuest)="completeQuest($event)"
+                (deleteQuest)="deleteQuest($event)"
+            ></app-card>
+            }
+        </div>
     </div>
 </main>

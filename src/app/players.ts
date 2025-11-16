@@ -22,6 +22,20 @@ export class PlayersService {
                     completed: false,
                     xp: 100,
                 },
+                {
+                    id: 2,
+                    title: 'Defeat the Dragon',
+                    description: 'Slay the dragon terrorizing the village.',
+                    completed: true,
+                    xp: 300,
+                },
+                {
+                    id: 3,
+                    title: 'Rescue the Princess',
+                    description: 'Save the princess from the evil warlock.',
+                    completed: false,
+                    xp: 200,
+                }
             ],
         },
     ];

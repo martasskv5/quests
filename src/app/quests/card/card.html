@@ -3,9 +3,9 @@
         <h2>{{ quest().id }}. {{ quest().title }}</h2>
         <span
             [ngClass]="{
-                `green`: quest().xp < 100,
-                `yellow`: quest().xp >= 100 && quest().xp < 200,
-                `red`: quest().xp >= 200
+                `green`: quest().xp < 150,
+                `yellow`: quest().xp >= 150 && quest().xp < 500,
+                `red`: quest().xp >= 500
             }"
             >XP: {{ quest().xp }}</span
         >
