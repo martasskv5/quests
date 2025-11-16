@@ -10,6 +10,8 @@
         <img [src]="player.profilePictureUrl" alt="{{ player.username }}'s Profile Picture" />
 
         <div class="quests-grid">
+            <h2 class="completed">Completed Quests</h2>
+            <h2 class="in-progress">In Progress Quests</h2>
             @for (quest of player.questsList; track $index) {
             <app-card
                 [ngClass]="{

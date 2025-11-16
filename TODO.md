@@ -62,7 +62,7 @@
 ### 17
 - [x] Split player quests into "Completed" and "In Progress" sections.
 - [x] Add ability to mark quests as completed or in progress for players.
-- [ ] Fix column order when changing quest status.
+- [x] ?Fix column order when changing quest status.
 
 ---
 
