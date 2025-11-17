@@ -3,12 +3,13 @@ import { Card } from './card/card';
 import { QuestsService } from '../quests.service';
 import { Quest } from '../modules';
 import { RouterModule } from "@angular/router";
+import { Search } from '../search/search';
 
 
 @Component({
     selector: 'app-quests',
     standalone: true,
-    imports: [Card, RouterModule],
+    imports: [Card, RouterModule, Search],
     templateUrl: './quests.html',
     styleUrls: ['./quests.scss'],
 })
@@ -34,6 +35,18 @@ export class Quests {
             }
             return quest;
         }));
+    }
+    onSearchChange(term: string) {
+        const allQuests = this.questsService.getQuests();
+        if (!term) {
+            this.quests.set(allQuests);
+        } else {
+            const filteredQuests = allQuests.filter(quest =>
+                quest.title.toLowerCase().includes(term.toLowerCase()) ||
+                quest.description.toLowerCase().includes(term.toLowerCase())
+            );
+            this.quests.set(filteredQuests);
+        }
     }
 
     ngOnInit() {

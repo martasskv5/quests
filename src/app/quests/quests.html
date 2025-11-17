@@ -1,8 +1,12 @@
 <main>
     <h2>Total Quests: {{ quests().length }}</h2>
+    <app-search (searchChanged)="onSearchChange($event)"></app-search>
 
-    @for (quest of quests(); track $index) {
+    @for (quest of quests(); track quest.id) {
     <app-card [questData]="quest" (deleteQuest)="deleteQuest($event)" (completeQuest)="completeQuest($event)" [routerLink]="[quest.id]"></app-card>
+    }
+    @empty {
+    <p>No quests available.</p>
     }
     <div class="new-quest" id="new-quest" [routerLink]="[`new`]">+</div>
 

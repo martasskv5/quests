@@ -1,4 +1,5 @@
 <main>
+    <app-search (searchChanged)="onSearchChange($event)"></app-search>
     @for (clan of clansData(); track $index) {
     <app-clans-card
         [clanData]="clan"

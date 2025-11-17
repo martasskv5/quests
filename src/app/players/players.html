@@ -1,17 +1,25 @@
 <main>
-
+    <app-search (searchChanged)="onSearchChange($event)"></app-search>
     <div class="form">
-        <select name="selectLevel" id="selectLevel" (change)="onLevelChange($any($event.target).value)">
+        <select
+            name="selectLevel"
+            id="selectLevel"
+            (change)="onLevelChange($any($event.target).value)"
+        >
             <option value="all">All Levels</option>
             @for (level of playerLevels; track $index) {
-                <option value="{{ level.title }}">{{ level.title }}</option>
+            <option value="{{ level.title }}">{{ level.title }}</option>
             }
         </select>
     </div>
-    
+
     @for (player of filteredPlayers(); track $index) {
-        <app-player-card [playerData]="player" [routerLink]="[player.username]" (deletePlayer)="handleDeletePlayer($event)"></app-player-card>
+    <app-player-card
+        [playerData]="player"
+        [routerLink]="[player.username]"
+        (deletePlayer)="handleDeletePlayer($event)"
+    ></app-player-card>
     }
-    
+
     <div id="addPlayer" class="new" [routerLink]="[`new`]">+</div>
 </main>

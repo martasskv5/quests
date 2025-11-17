@@ -78,4 +78,9 @@
 ---
 
 ### 19
-- [ ] Implement search functionality for players based on PlayerLevel.
+- [x] Implement search functionality for players based on PlayerLevel.
+
+---
+
+### 20
+- [x] Implement search functionality for clans based on clan name.
