@@ -1,9 +1,16 @@
 <main>
     <h1>Add New Player</h1>
 
-    <form class="form" (ngSubmit)="createPlayer()">
+    <form class="form" [formGroup]="playerForm" (ngSubmit)="createPlayer()">
         <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="username" name="name" required>
+        <input type="text" id="name" formControlName="username" required>
+        @if (playerForm.get('username')?.invalid && playerForm.get('username')?.touched) {
+            <div class="error">Name is required.</div>
+        }
+
+        @if (playerForm.invalid && (playerForm.touched || playerForm.dirty)) {
+            <div class="error">Please fill out all required fields correctly.</div>
+        }
 
         <button type="submit">Add Player</button>
     </form>

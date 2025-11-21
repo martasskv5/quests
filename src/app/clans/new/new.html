@@ -1,15 +1,28 @@
 <main>
     <h1>Add New Clan</h1>
 
-    <form class="form" (ngSubmit)="createClan()">
+    <form class="form" [formGroup]="clanForm" (ngSubmit)="createClan()">
         <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="name" name="name" required>
+        <input type="text" id="name" formControlName="name" required>
+        @if (clanForm.get('name')?.invalid && clanForm.get('name')?.touched) {
+            <div class="error">Name is required.</div>
+        }
 
         <label for="description">Description:</label>
-        <input type="text" id="description" [(ngModel)]="description" name="description" required>
+        <input type="text" id="description" formControlName="description" name="description" required>
+        @if (clanForm.get('description')?.invalid && clanForm.get('description')?.touched) {
+            <div class="error">Description is required.</div>
+        }
 
         <label for="capacity">Capacity:</label>
-        <input type="number" id="capacity" [(ngModel)]="capacity" name="capacity" required>
+        <input type="number" id="capacity" formControlName="capacity" name="capacity" required>
+        @if (clanForm.get('capacity')?.invalid && clanForm.get('capacity')?.touched) {
+            <div class="error">Capacity is required and must be at least 1.</div>
+        }
+
+        @if (clanForm.invalid && (clanForm.touched || clanForm.dirty)) {
+            <div class="error">Please fill out all required fields correctly.</div>
+        }
 
         <button type="submit">Add Clan</button>
     </form>

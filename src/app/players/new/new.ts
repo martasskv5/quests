@@ -1,33 +1,40 @@
 import { Component, inject,  } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Player } from '../../modules';
 import { PlayersService } from '../../players';
 import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-new',
-  imports: [FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './new.html',
   styleUrl: './new.scss'
 })
 export class New {
     playersService = inject(PlayersService);
+    private fb = inject(FormBuilder);
 
-    playerId: number = Math.floor(Math.random() * 10000) + 1000;
-    username: string = '';
-    xp: number = 0;
-    clan: string = '';
-    profilePictureUrl: string = '';
-    questsList: any[] = [];
+    playerForm = this.fb.group({
+        username: ['', [Validators.required]],
+        xp: [0, [Validators.required, Validators.min(0)]],
+        clan: [''],
+        profilePictureUrl: [''],
+    });
 
     createPlayer() {
+        if (this.playerForm.invalid) {
+            this.playerForm.markAllAsTouched();
+            return;
+        }
+
+        const fv = this.playerForm.value as { username: string; xp: number; clan: string; profilePictureUrl: string };
         const newPlayer: Player = {
-            id: this.playerId,
-            username: this.username,
-            xp: this.xp,
-            // clan: this.clan,
-            profilePictureUrl: this.profilePictureUrl,
-            questsList: this.questsList
+            id: Math.floor(Math.random() * 10000) + 1000,
+            username: fv.username,
+            xp: fv.xp,
+            // clan: fv.clan,
+            profilePictureUrl: fv.profilePictureUrl,
+            questsList: []
         };
 
         // Call the service to add the new player
