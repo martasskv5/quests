@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { computed } from '@angular/core';
 import { Quest } from '../../modules';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-card',
@@ -10,6 +11,19 @@ import { Quest } from '../../modules';
     styleUrls: ['./card.scss'],
 })
 export class Card {
+    route: ActivatedRoute = inject(ActivatedRoute);
+    status: boolean = true;
+    delete: boolean = true;
+
+    ngOnInit() {
+        if (this.route.snapshot.url.find(segment => segment.path === 'quests')) {
+            this.status = false;
+        }
+        if (this.route.snapshot.url.find(segment => segment.path === 'players')) {
+            this.delete = false;
+        }        
+    }
+
     @Input() questData!: Quest;
     quest = computed(() => this.questData);
 

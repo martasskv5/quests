@@ -13,11 +13,16 @@ import { Card as QuestsCard } from '../../quests/card/card';
 })
 export class Detail {
     route: ActivatedRoute = inject(ActivatedRoute);
-    player: Player;
     playerService: PlayersService = inject(PlayersService);
+
+    player: Player;
+    playerLevel: string = '';
+    playerNextLevel: number = 0;
     constructor() {
         const username = this.route.snapshot.paramMap.get('username');
         this.player = this.playerService.getPlayerByUsername(String(username));
+        this.playerLevel = this.playerService.getPlayerLevel(this.player.username).title;
+        this.playerNextLevel = this.getNextLevel().xpRequired - this.player.xp;
     }
 
     completeQuest(id: number) {
