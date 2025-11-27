@@ -3,72 +3,13 @@
 @include main;
 @include card;
 
-/* Place completed quests in left column, in-progress on right.
-   Put this in `src/app/players/detail/detail.scss` or the component scss. */
-.quests-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* two equal columns */
-  gap: 1rem;
-  align-items: start;
-  /* make rows size to content by default so headings stay compact */
-  grid-auto-rows: min-content;
-}
+section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 
-/* Ensure the card takes full column width */
-.quests-grid > app-card,
-.quests-grid > .quest-card,
-.quests-grid > .player-card {
-  width: 100%;
-  display: block; /* ensures block-level width in grid cell */
-}
-
-/* Assign column: completed -> column 1, in-progress -> column 2 */
-.quests-grid > .completed {
-  grid-column: 1;
-}
-
-.quests-grid > .in-progress {
-  grid-column: 2;
-}
-
-/* Anchor the two section headings to the top row so they don't move
-   when items in either column change height or number. The headings
-   currently share the same class names as cards ("completed"/"in-progress").
-   Target the `h2` specifically so headings are fixed to row 1 while
-   cards flow into subsequent rows. */
-.quests-grid > h2.completed { grid-column: 1; grid-row: 1; margin: 0 0 0.5rem 0; }
-.quests-grid > h2.in-progress { grid-column: 2; grid-row: 1; margin: 0 0 0.5rem 0; }
-
-/* Ensure cards start after the heading row and stay in their column. */
-.quests-grid > app-card.completed,
-.quests-grid > .quest-card.completed,
-.quests-grid > .player-card.completed {
-  grid-column: 1;
-  grid-row: auto; /* flow into rows below the headings */
-  margin-top: 0.25rem;
-}
-.quests-grid > app-card.in-progress,
-.quests-grid > .quest-card.in-progress,
-.quests-grid > .player-card.in-progress {
-  grid-column: 2;
-  grid-row: auto;
-  margin-top: 0.25rem;
-}
-
-/* Responsive: collapse to single column on small screens */
-@media (max-width: 640px) {
-  .quests-grid {
-    grid-template-columns: 1fr;
-  }
-  .quests-grid > h2.completed,
-  .quests-grid > h2.in-progress {
-    grid-column: 1;
-    grid-row: auto;
-  }
-  .quests-grid > app-card.completed,
-  .quests-grid > app-card.in-progress,
-  .quests-grid > .quest-card,
-  .quests-grid > .player-card {
-    grid-column: 1;
-  }
+    .quests-list {
+        flex: 1;
+        margin-right: 20px;
+    }
 }

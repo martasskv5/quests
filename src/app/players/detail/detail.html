@@ -10,21 +10,43 @@
         }
         <img [src]="player.profilePictureUrl" alt="{{ player.username }}'s Profile Picture" />
 
-        <div class="quests-grid">
-            <h2 class="completed">Completed Quests</h2>
-            <h2 class="in-progress">In Progress Quests</h2>
-            @for (quest of player.questsList; track $index) {
-            <app-card
-                [ngClass]="{
-                    `completed`: quest.completed,
-                    `in-progress`: !quest.completed
-                }"
-                [questData]="quest"
-                [routerLink]="[`/quests`, quest.id]"
-                (completeQuest)="completeQuest($event)"
-                (deleteQuest)="deleteQuest($event)"
-            ></app-card>
-            }
-        </div>
+        <section>
+            <div class="quests-list">
+                <h2 class="completed">Completed Quests</h2>
+                <!-- @for (quest of player.questsList; track $index) {
+                    <app-card
+                    [ngClass]="{
+                        `completed`: quest.completed,
+                        `in-progress`: !quest.completed
+                        }"
+                        [questData]="quest"
+                        [routerLink]="[`/quests`, quest.id]"
+                        (completeQuest)="completeQuest($event)"
+                        (deleteQuest)="deleteQuest($event)"
+                        ></app-card>
+                        } -->
+                @for (quest of completedQuests(); track quest.id) {
+                <app-card
+                    class="completed"
+                    [questData]="quest"
+                    [routerLink]="[`/quests`, quest.id]"
+                    (completeQuest)="completeQuest($event)"
+                    (deleteQuest)="deleteQuest($event)"
+                ></app-card>
+                }
+            </div>
+            <div class="quests-list">
+                <h2 class="in-progress">In Progress Quests</h2>
+                @for (quest of inProgressQuests(); track quest.id) {
+                <app-card
+                    class="in-progress"
+                    [questData]="quest"
+                    [routerLink]="[`/quests`, quest.id]"
+                    (completeQuest)="completeQuest($event)"
+                    (deleteQuest)="deleteQuest($event)"
+                ></app-card>
+                }
+            </div>
+        </section>
     </div>
 </main>
