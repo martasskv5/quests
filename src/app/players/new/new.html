@@ -1,18 +1,20 @@
 <main>
     <h1>Add New Player</h1>
 
-    <form class="form" [formGroup]="playerForm" (ngSubmit)="createPlayer()">
+    <form class="form" (submit)="createPlayer($event)" novalidate>
         <label for="name">Name:</label>
-        <input type="text" id="name" formControlName="username" required>
-        @if (playerForm.get('username')?.invalid && playerForm.get('username')?.touched) {
-            <div class="error">Name is required.</div>
+        <input type="text" id="name" [field]="playerForm.username" />
+        @if (playerForm.username().invalid() && playerForm.username().touched()) {
+            @for (error of playerForm.username().errors(); track error.kind) {
+                <div class="error">{{ error.message }}</div>
+            }
         }
 
-        @if (playerForm.invalid && (playerForm.touched || playerForm.dirty)) {
+        @if (playerForm().invalid() && (playerForm().touched() || playerForm().dirty())) {
             <div class="error">Please fill out all required fields correctly.</div>
         }
 
-        <button type="submit">Add Player</button>
+        <button type="submit" [disabled]="playerForm().invalid()">Add Player</button>
     </form>
 
     <div class="back" [routerLink]="[`/players`]">Back</div>

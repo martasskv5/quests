@@ -28,7 +28,7 @@ export class Detail {
         this.inProgressQuests.set(this.player.questsList.filter((quest) => !quest.completed));
     }
 
-    completeQuest(id: number) {
+    completeQuest(id: string) {
         console.log('[player-detail] completeQuest called with id:', id);
 
         // Immutable update: create new quest objects and replace the list
@@ -62,7 +62,7 @@ export class Detail {
         }
     }
 
-    deleteQuest(id: number) {
+    deleteQuest(id: string) {
         console.log('[player-detail] deleteQuest called with id:', id);
         const updated = this.player.questsList.filter((q) => q.id !== id);
         this.player.questsList = updated;

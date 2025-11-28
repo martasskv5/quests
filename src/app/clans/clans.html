@@ -3,7 +3,7 @@
     @for (clan of clansData(); track $index) {
     <app-clans-card
         [clanData]="clan"
-        (deleteClan)="handleDeleteClan($event)"
+        (deleteClan)="handleDeleteClan($event.toString())"
         [routerLink]="[clan.name]"
     ></app-clans-card>
     }

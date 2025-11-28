@@ -1,42 +1,47 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Clan } from '../../modules';
 import { ClanService } from '../../clans';
 import { RouterLink } from '@angular/router';
+import { form, Field, required, submit, min } from '@angular/forms/signals';
 
 @Component({
     selector: 'app-clan-new',
-    imports: [ReactiveFormsModule, RouterLink],
+    imports: [ReactiveFormsModule, RouterLink, Field],
     templateUrl: './new.html',
     styleUrl: './new.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClanNew {
     clanService = inject(ClanService);
-    private fb = inject(FormBuilder);
 
-    clanForm = this.fb.group({
-        name: ['', [Validators.required]],
-        description: [''],
-        capacity: [10, [Validators.required, Validators.min(1)]],
-        profilePictureUrl: [''],
-        players: [[]],
+    clanModel = signal<Clan>({
+        name: '',
+        description: '',
+        capacity: 10,
+        profilePictureUrl: '',
+        players: [],
     });
 
-    createClan() {
-        if (this.clanForm.invalid) {
-            this.clanForm.markAllAsTouched();
+    clanForm = form(this.clanModel, (fieldPath) => {
+        required(fieldPath.name, { message: 'Clan name is required' });
+        required(fieldPath.description, { message: 'Description is required' });
+        required(fieldPath.capacity, { message: 'Capacity is required' });
+        min(fieldPath.capacity, 1, { message: 'Capacity must be at least 1' });
+    });
+
+    createClan(event: Event) {
+        event.preventDefault();
+        if (this.clanForm().invalid()) {
+            this.clanForm().markAsTouched();
             return;
         }
 
-        const fv = this.clanForm.value as { name: string; description: string; capacity: number;};
-        const newClan: Clan = {
-            name: fv.name,
-            description: fv.description,
-            capacity: fv.capacity,
-            profilePictureUrl: '',
-            players: [],
-        };
-        // Call the service to add the new clan
-        this.clanService.addClan(newClan);
+        submit(this.clanForm, async (form) => {
+            console.log('[new-clan] Form submitted with value:', form().value());
+            const clan = form().value();
+            this.clanService.addClan(clan);
+            this.clanForm().reset();
+        });
     }
 }

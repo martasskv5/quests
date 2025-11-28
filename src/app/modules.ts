@@ -1,5 +1,5 @@
 export interface Quest {
-    id: number;
+    id: string;
     title: string;
     description: string;
     completed: boolean;
@@ -7,7 +7,7 @@ export interface Quest {
 }
 
 export interface Player {
-    id: number;
+    id: string;
     username: string;
     xp: number;
     clan?: Clan;

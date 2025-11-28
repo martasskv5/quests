@@ -1,30 +1,32 @@
 <main>
     <h1>Add New Clan</h1>
 
-    <form class="form" [formGroup]="clanForm" (ngSubmit)="createClan()">
+    <form class="form" (submit)="createClan($event)" novalidate>
         <label for="name">Name:</label>
-        <input type="text" id="name" formControlName="name" required>
-        @if (clanForm.get('name')?.invalid && clanForm.get('name')?.touched) {
-            <div class="error">Name is required.</div>
+        <input type="text" id="name" [field]="clanForm.name" />
+        @if (clanForm.name().invalid() && clanForm.name().touched()) {
+            @for (error of clanForm.name().errors(); track error.kind) {
+                <div class="error">{{ error.message }}</div>
+            }
         }
 
         <label for="description">Description:</label>
-        <input type="text" id="description" formControlName="description" name="description" required>
-        @if (clanForm.get('description')?.invalid && clanForm.get('description')?.touched) {
+        <input type="text" id="description" [field]="clanForm.description" />
+        @if (clanForm.description().invalid() && clanForm.description().touched()) {
             <div class="error">Description is required.</div>
         }
 
         <label for="capacity">Capacity:</label>
-        <input type="number" id="capacity" formControlName="capacity" name="capacity" required>
-        @if (clanForm.get('capacity')?.invalid && clanForm.get('capacity')?.touched) {
+        <input type="number" id="capacity" [field]="clanForm.capacity" />
+        @if (clanForm.capacity().invalid() && clanForm.capacity().touched()) {
             <div class="error">Capacity is required and must be at least 1.</div>
         }
 
-        @if (clanForm.invalid && (clanForm.touched || clanForm.dirty)) {
+        @if (clanForm().invalid() && (clanForm().touched() || clanForm().dirty())) {
             <div class="error">Please fill out all required fields correctly.</div>
         }
 
-        <button type="submit">Add Clan</button>
+        <button type="submit" [disabled]="clanForm().invalid()">Add Clan</button>
     </form>
 
     <div class="back" [routerLink]="[`/clans`]">Back</div>

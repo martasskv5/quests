@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, computed, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Clan, Player } from '../../../modules';
@@ -10,6 +10,7 @@ import { PlayersService } from '../../../players';
     imports: [FormsModule],
     templateUrl: './member.html',
     styleUrl: './member.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewMember {
     @Output() memberAdded = new EventEmitter<any>();
@@ -29,12 +30,7 @@ export class NewMember {
 
     avaiblePlayers: Player[] = this.playerService.getPlayers();
 
-    // Random ID for the new member
-    id: number = Math.floor(Math.random() * 100000);
     username: string = '';
-    level: number = 1;
-    profilePictureUrl: string = '';
-    playerClan: Clan = this.clan!;
 
     addMember() {
         const newMember: Player = this.playerService.getPlayerByUsername(this.username);

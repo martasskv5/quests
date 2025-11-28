@@ -25,10 +25,10 @@ export class Quests {
         // Logic to show the quest creation form
         this.questFormVisible = !this.questFormVisible;
     }
-    deleteQuest(id: number) {
+    deleteQuest(id: string) {
         this.quests.update(quests => quests.filter((quest) => quest.id !== id));
     }
-    completeQuest(id: number) {
+    completeQuest(id: string) {
         this.quests.update(quests => quests.map((quest) => {
             if (quest.id === id) {
                 quest.completed = true;

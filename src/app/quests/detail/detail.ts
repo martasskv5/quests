@@ -15,7 +15,7 @@ export class Detail {
     constructor() {
         const questId = this.route.snapshot.paramMap.get('id');
         const questsService = inject(QuestsService);
-        this.quest = questsService.getQuestById(Number(questId));
+        this.quest = questsService.getQuestById(questId as string);
         console.log('Quest detail for ID:', questId, this.quest);
     }
 }

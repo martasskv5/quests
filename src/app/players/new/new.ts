@@ -1,43 +1,45 @@
-import { Component, inject,  } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { form, Field, required, submit } from '@angular/forms/signals';
 import { Player } from '../../modules';
 import { PlayersService } from '../../players';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
+import { v7 as uuidv7 } from 'uuid';
 
 @Component({
-  selector: 'app-new',
-  imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './new.html',
-  styleUrl: './new.scss'
+    selector: 'app-new',
+    imports: [ReactiveFormsModule, RouterLink, Field],
+    templateUrl: './new.html',
+    styleUrl: './new.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class New {
     playersService = inject(PlayersService);
-    private fb = inject(FormBuilder);
 
-    playerForm = this.fb.group({
-        username: ['', [Validators.required]],
-        xp: [0, [Validators.required, Validators.min(0)]],
-        clan: [''],
-        profilePictureUrl: [''],
+    playerModel = signal<Player>({
+        id: uuidv7(),
+        username: '',
+        xp: 0,
+        profilePictureUrl: '',
+        questsList: [],
     });
 
-    createPlayer() {
-        if (this.playerForm.invalid) {
-            this.playerForm.markAllAsTouched();
+    playerForm = form(this.playerModel, (fieldPath) => {
+        required(fieldPath.username, { message: 'Username is required' });
+    });
+
+    createPlayer(event: Event) {
+        event.preventDefault();
+        if (this.playerForm().invalid()) {
+            this.playerForm().markAsTouched();
             return;
         }
 
-        const fv = this.playerForm.value as { username: string; xp: number; clan: string; profilePictureUrl: string };
-        const newPlayer: Player = {
-            id: Math.floor(Math.random() * 10000) + 1000,
-            username: fv.username,
-            xp: fv.xp,
-            // clan: fv.clan,
-            profilePictureUrl: fv.profilePictureUrl,
-            questsList: []
-        };
-
-        // Call the service to add the new player
-        this.playersService.addPlayer(newPlayer);
+        submit(this.playerForm, async (form) => {
+            console.log('[new-player] Form submitted with value:', form().value());
+            const newPlayer = form().value();
+            this.playersService.addPlayer(newPlayer);
+            this.playerForm().reset();
+        });
     }
 }

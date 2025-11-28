@@ -15,13 +15,13 @@ export class ClanService {
             profilePictureUrl: undefined,
             players: [
                 {
-                    id: 1,
+                    id: "019acb0a-e611-77d6-ae74-eb13b6fccdfb",
                     username: 'Hero123',
                     xp: 200,
                     profilePictureUrl: undefined,
                     questsList: [
                         {
-                            id: 1,
+                            id: "019acb05-85f9-796c-b8fd-44adf2739f7d",
                             title: 'Find the Lost Sword',
                             description: 'Retrieve the legendary sword from the ancient ruins.',
                             completed: false,

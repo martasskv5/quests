@@ -1,41 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { form, Field, required, submit, min } from '@angular/forms/signals';
 import { QuestsService } from '../../quests.service';
 import { Quest } from '../../modules';
+import {v7 as uuidv7} from 'uuid';
 
 @Component({
     selector: 'app-new',
-    imports: [RouterModule, ReactiveFormsModule],
+    imports: [RouterModule, ReactiveFormsModule, Field],
     templateUrl: './new.html',
     styleUrls: ['./new.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class New {
     questsService = inject(QuestsService);
-    private fb = inject(FormBuilder);
 
-    questForm = this.fb.group({
-        title: ['', [Validators.required]],
-        description: ['', [Validators.required]],
-        xp: [0, [Validators.required, Validators.min(0)]],
+    questModel = signal<Quest>({
+        id: uuidv7(),
+        title: '',
+        description: '',
+        xp: 1,
+        completed: false,
+    })
+
+    questForm = form(this.questModel, (fieldPath) => {
+        required(fieldPath.title, { message: 'Title is required' });
+        required(fieldPath.description, { message: 'Description is required' });
+        required(fieldPath.xp, { message: 'XP is required' });
+        min(fieldPath.xp, 1, { message: 'XP must be at least 1' });
     });
 
-    createQuest() {
-        if (this.questForm.invalid) {
-            this.questForm.markAllAsTouched();
+    createQuest(event: Event) {
+        event.preventDefault();
+        if (this.questForm().invalid()) {
+            this.questForm().markAsTouched();
             return;
         }
 
-        const fv = this.questForm.value as { title: string; description: string; xp: number };
-        const newQuest: Quest = {
-            id: Math.floor(Math.random() * 10000) + 1000,
-            title: fv.title,
-            description: fv.description,
-            completed: false,
-            xp: Number(fv.xp),
-        };
-
-        this.questsService.addQuest(newQuest);
-        this.questForm.reset({ xp: 0 });
+        submit(this.questForm, async (form) => {
+            console.log('[new-quest] Form submitted with value:', form().value());
+            const quest = form().value();
+            this.questsService.addQuest(quest);
+            this.questForm().reset();
+        });
     }
 }

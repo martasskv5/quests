@@ -27,8 +27,8 @@ export class Card {
     @Input() questData!: Quest;
     quest = computed(() => this.questData);
 
-    @Output() deleteQuest = new EventEmitter<number>();
-    @Output() completeQuest = new EventEmitter<number>();
+    @Output() deleteQuest = new EventEmitter<string>();
+    @Output() completeQuest = new EventEmitter<string>();
 
     handleDelete(event: Event) {
         event.stopPropagation();
