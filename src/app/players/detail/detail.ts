@@ -42,7 +42,24 @@ export class Detail {
         this.completedQuests.set(updated.filter((q) => q.completed));
         this.inProgressQuests.set(updated.filter((q) => !q.completed));
 
-        console.log('[player-detail] after update, completed:', this.completedQuests(), 'inProgress:', this.inProgressQuests());
+        console.log(
+            '[player-detail] after update, completed:',
+            this.completedQuests(),
+            'inProgress:',
+            this.inProgressQuests()
+        );
+
+        // update player XP based on quest completion
+        const quest = updated.find((q) => q.id === id);
+        if (quest) {
+            if (quest.completed) {
+                this.player.xp += quest.xp;
+            } else {
+                this.player.xp -= quest.xp;
+            }
+            this.playerLevel = this.playerService.getPlayerLevel(this.player.username).title;
+            this.playerNextLevel = this.getNextLevel().xpRequired - this.player.xp;
+        }
     }
 
     deleteQuest(id: number) {
@@ -51,7 +68,12 @@ export class Detail {
         this.player.questsList = updated;
         this.completedQuests.set(updated.filter((q) => q.completed));
         this.inProgressQuests.set(updated.filter((q) => !q.completed));
-        console.log('[player-detail] after delete, completed:', this.completedQuests(), 'inProgress:', this.inProgressQuests());
+        console.log(
+            '[player-detail] after delete, completed:',
+            this.completedQuests(),
+            'inProgress:',
+            this.inProgressQuests()
+        );
     }
 
     getNextLevel(): PlayerLevel {
