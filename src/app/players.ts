@@ -36,6 +36,13 @@ export class PlayersService {
                     completed: false,
                     xp: 200,
                 },
+                {
+                    id: 4,
+                    title: 'Explore the Dark Forest',
+                    description: 'Map out the uncharted areas of the Dark Forest.',
+                    completed: false,
+                    xp: 600,
+                },
             ],
         },
     ];
