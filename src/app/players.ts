@@ -1,79 +1,57 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, WritableSignal } from '@angular/core';
 import { Player, playerLevels, PlayerLevel } from './modules';
+import { HttpClient } from '@angular/common/http';
+import { ClanService } from './clans';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PlayersService {
-    private players: Player[] = [
-        {
-            id: '019acb0a-e611-77d6-ae74-eb13b6fccdfb',
-            username: 'Hero123',
-            xp: 1200,
-            // resolved at runtime by ClanService; avoid injecting ClanService here to prevent circular DI
-            clan: undefined,
-            profilePictureUrl: undefined,
-            questsList: [
-                {
-                    id: '019acb05-85f9-796c-b8fd-44adf2739f7d',
-                    title: 'Find the Lost Sword',
-                    description: 'Retrieve the legendary sword from the ancient ruins.',
-                    completed: false,
-                    xp: 100,
-                },
-                {
-                    id: '019acb05-a8a6-766b-9bfb-d17b8afc5961',
-                    title: 'Rescue the Villagers',
-                    description: 'Save the villagers captured by goblins.',
-                    completed: true,
-                    xp: 200,
-                },
-                {
-                    id: '019acb05-debf-742d-a674-9cc4106f7511',
-                    title: 'Collect Herbs',
-                    description: 'Gather 10 healing herbs for the village healer.',
-                    completed: false,
-                    xp: 50,
-                },
-                {
-                    id: '019acb05-f7ff-783b-b459-8999ea2c3df2',
-                    title: 'Defeat the Dragon',
-                    description: 'Slay the dragon terrorizing the village.',
-                    completed: false,
-                    xp: 500,
-                },
-                {
-                    id: '019acb06-057d-79b1-8596-dd50a3c7c92f',
-                    title: 'Explore the Cave',
-                    description: 'Investigate the mysterious cave near the village.',
-                    completed: true,
-                    xp: 150,
-                },
-            ],
-        },
-    ];
+    private players: WritableSignal<Player[]> = signal([]);
+    private clanService = inject(ClanService);
+    url = 'http://localhost:3000/players';
+    private http = inject(HttpClient);
 
     constructor() {
         console.info(
             '%c PlayersService initialized',
             'color: white; padding: 15px; border: 1px solid green; background-color: green;'
         );
+        this.http.get<Player[]>(this.url).subscribe((data) => {
+            console.log('[PlayersService] loaded players', data);
+            // After loading players, load clans for each player
+            data.forEach((player) => {
+                if (player.clan) {
+                    const clan = this.clanService.getClanByName(player.clan as unknown as string);
+                    console.log(this.clanService.getClans());
+                    
+                    if (clan) {
+                        console.log(
+                            `[PlayersService] associating player ${player.username} with clan ${clan.name}`
+                        );
+                        // Here you could add logic to associate the player with the clan if needed
+                        player.clan = clan;
+                    }
+                }
+            });
+            this.players.set(data);
+        });
     }
 
     addPlayer(player: Player): void {
-        this.players.push(player);
+        this.players.update((list) => [...list, player]);
     }
 
     getPlayers(): Player[] {
-        return this.players;
+        return this.players();
     }
 
     getPlayerByUsername(username: string): Player {
-        return this.players.find((player) => player.username === username) as Player;
+        return this.players().find((player) => player.username === username) as Player;
     }
 
     getPlayerById(id: string): Player {
-        return this.players.find((player) => player.id === id) as Player;
+        return this.players().find((player) => player.id === id) as Player;
     }
 
     getPlayerLevel(player: string): PlayerLevel {
@@ -90,6 +68,6 @@ export class PlayersService {
     }
 
     deletePlayerByUsername(username: string): void {
-        this.players = this.players.filter((player) => player.username !== username);
+        this.players.update((list) => list.filter((player) => player.username !== username));
     }
 }

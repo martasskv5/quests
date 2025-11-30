@@ -1,4 +1,4 @@
-import { Component, computed, inject, WritableSignal, signal } from '@angular/core';
+import { Component, computed, inject, WritableSignal, signal, effect } from '@angular/core';
 import { Player, playerLevels } from '../modules';
 import { PlayersService } from '../players';
 import { Card } from './card/card';
@@ -14,9 +14,16 @@ import { Search } from '../search/search';
 })
 export class Players {
     playersService = inject(PlayersService);
-    playersData: WritableSignal<Player[]> = signal(this.playersService.getPlayers());
+    private allPlayers = computed(() => this.playersService.getPlayers());
+    playersData: WritableSignal<Player[]> = signal(this.allPlayers());
     playerLevels = playerLevels;
     selectedLevel: WritableSignal<string> = signal('all');
+
+    constructor() {
+        effect(() => {
+            this.playersData.set(this.allPlayers());
+        });
+    }
 
     handleDeletePlayer(username: string) {
         this.playersService.deletePlayerByUsername(username);
