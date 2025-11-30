@@ -6,7 +6,7 @@
         <p>Capacity: {{ clan.capacity }}</p>
         <p>Members:</p>
         <ul>
-            @for (member of clan.players; track $index) {
+            @for (member of clanPlayers; track $index) {
             <li [routerLink]="[`/players`, member.username]">{{ member.username }}</li>
             <div
                 class="delete"

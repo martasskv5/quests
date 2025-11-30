@@ -1,4 +1,4 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { Component, inject, signal, WritableSignal, computed, effect } from '@angular/core';
 import { ClanService } from '../clans';
 import { Clan } from '../modules';
 import { ClanCard } from './card/card';
@@ -13,7 +13,15 @@ import { Search } from '../search/search';
 })
 export class Clans {
     clanService = inject(ClanService);
-    clansData: WritableSignal<Clan[]> = signal(this.clanService.getClans());
+    private allClans = computed(() => this.clanService.getClans());
+    clansData: WritableSignal<Clan[]> = signal(this.allClans());
+
+    constructor() {
+        // keep local signal in sync with the service signal
+        effect(() => {
+            this.clansData.set(this.allClans());
+        });
+    }
 
     handleDeleteClan(name: string) {
         this.clanService.deleteClanByName(name);

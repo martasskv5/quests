@@ -20,7 +20,7 @@ export interface Clan {
     description: string;
     capacity: number;
     profilePictureUrl?: string;
-    players: Player[];
+    players: string[];
 }
 export interface PlayerLevel {
     level: number;

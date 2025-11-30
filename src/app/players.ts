@@ -1,18 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Player, playerLevels, PlayerLevel } from './modules';
-import { ClanService } from './clans';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PlayersService {
-    private clanService = inject(ClanService);
     private players: Player[] = [
         {
             id: '019acb0a-e611-77d6-ae74-eb13b6fccdfb',
             username: 'Hero123',
             xp: 1200,
-            clan: this.clanService.getClanByName('Warriors'),
+            // resolved at runtime by ClanService; avoid injecting ClanService here to prevent circular DI
+            clan: undefined,
             profilePictureUrl: undefined,
             questsList: [
                 {
@@ -71,6 +70,10 @@ export class PlayersService {
 
     getPlayerByUsername(username: string): Player {
         return this.players.find((player) => player.username === username) as Player;
+    }
+
+    getPlayerById(id: string): Player {
+        return this.players.find((player) => player.id === id) as Player;
     }
 
     getPlayerLevel(player: string): PlayerLevel {
