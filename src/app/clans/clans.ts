@@ -23,8 +23,8 @@ export class Clans {
         });
     }
 
-    handleDeleteClan(name: string) {
-        this.clanService.deleteClanByName(name);
+    handleDeleteClan(id: string) {
+        this.clanService.deleteClanById(id);
         this.clansData.set(this.clanService.getClans());
     }
 

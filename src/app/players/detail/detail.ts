@@ -2,6 +2,7 @@ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { Player, playerLevels, PlayerLevel, Quest } from '../../modules';
 import { PlayersService } from '../../players';
+import { QuestsService } from '../../quests.service';
 import { Card as QuestsCard } from '../../quests/card/card';
 
 @Component({
@@ -13,10 +14,12 @@ import { Card as QuestsCard } from '../../quests/card/card';
 export class Detail {
     route: ActivatedRoute = inject(ActivatedRoute);
     playerService: PlayersService = inject(PlayersService);
+    questsService: QuestsService = inject(QuestsService);
 
     player: Player;
     playerLevel: string = '';
     playerNextLevel: number = 0;
+    playerQuests: WritableSignal<Quest[]> = signal([]);
     completedQuests: WritableSignal<Quest[]> = signal([]);
     inProgressQuests: WritableSignal<Quest[]> = signal([]);
     constructor() {
@@ -24,19 +27,43 @@ export class Detail {
         this.player = this.playerService.getPlayerByUsername(String(username));
         this.playerLevel = this.playerService.getPlayerLevel(this.player.username).title;
         this.playerNextLevel = this.getNextLevel().xpRequired - this.player.xp;
-        this.completedQuests.set(this.player.questsList.filter((quest) => quest.completed));
-        this.inProgressQuests.set(this.player.questsList.filter((quest) => !quest.completed));
+
+        // Load quests for the player
+        const allQuests = this.questsService.getQuests();
+        // Keep only quests that are assigned to the player (produces Quest[])
+        const playerQuests = allQuests.filter((quest) =>
+            this.player.questsList.some((q) => q.id === quest.id)
+        );
+
+        // update quests status based on player's questsList
+        playerQuests.forEach((quest) => {
+            const playerQuest = this.player.questsList.find((q) => q.id === quest.id);
+            if (playerQuest) {
+                quest.completed = playerQuest.completed;
+            }
+        });
+
+        // set the signal and derived lists
+        this.playerQuests.set(playerQuests);
+        console.log(this.playerQuests());
+
+        this.completedQuests.set(
+            playerQuests.filter((q) => q.completed)
+        );
+        this.inProgressQuests.set(
+            playerQuests.filter((q) => !q.completed)
+        );
     }
 
     completeQuest(id: string) {
         console.log('[player-detail] completeQuest called with id:', id);
 
         // Immutable update: create new quest objects and replace the list
-        const updated = this.player.questsList.map((q) =>
+        const updated = this.playerQuests().map((q) =>
             q.id === id ? { ...q, completed: !q.completed } : q
         );
 
-        this.player.questsList = updated;
+        this.playerQuests.set(updated);
 
         // Refresh the local signals used for rendering the two columns
         this.completedQuests.set(updated.filter((q) => q.completed));

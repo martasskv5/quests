@@ -21,7 +21,7 @@ export class Card {
         if (this.playerData.id != null) {
             console.log(this.playerData.username);
 
-            this.deletePlayer.emit(this.playerData.username);
+            this.deletePlayer.emit(this.playerData.id);
         }
     }
 }

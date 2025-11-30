@@ -18,7 +18,7 @@ export class ClanCard {
         event.stopPropagation();
         if (this.clanData != null) {
             console.log(this.clanData.name);
-            this.deleteClan.emit(this.clanData.name);
+            this.deleteClan.emit(this.clanData.id);
         }
     }
 }

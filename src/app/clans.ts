@@ -22,6 +22,11 @@ export class ClanService {
 
     addClan(clan: Clan): void {
         this.clansSignal.update((list) => [...list, clan]);
+
+        // updata database
+        this.http.post<Clan>(this.url, clan).subscribe((data) => {
+            console.log('[ClanService] added clan', data);
+        });
     }
 
     getClans(): Clan[] {
@@ -32,14 +37,24 @@ export class ClanService {
         return this.clansSignal().find((clan) => clan.name === name) as Clan;
     }
 
-    deleteClanByName(name: string): void {
-        this.clansSignal.update((list) => list.filter((clan) => clan.name !== name));
+    deleteClanById(id: string): void {
+        this.clansSignal.update((list) => list.filter((clan) => clan.id !== id));
+
+        // update database
+        this.http.delete(`${this.url}/${id}`).subscribe(() => {
+            console.log(`[ClanService] deleted clan with id: ${id}`);
+        });
     }
 
     addPlayerToClan(clanName: string, player: any): void {
         this.clansSignal.update((list) =>
             list.map((clan) => (clan.name === clanName ? { ...clan, players: [...clan.players, player] } : clan))
         );
+
+        // update database
+        this.http.post(`${this.url}/${clanName}/players`, player).subscribe(() => {
+            console.log(`[ClanService] added player to clan: ${clanName}`);
+        });
     }
 
     deletePlayerFromClan(clanName: string, playerId: string): void {
@@ -48,5 +63,10 @@ export class ClanService {
                 clan.name === clanName ? { ...clan, players: clan.players.filter((p: any) => p.id !== playerId) } : clan
             )
         );
+
+        // update database
+        this.http.delete(`${this.url}/${clanName}/players/${playerId}`).subscribe(() => {
+            console.log(`[ClanService] deleted player from clan: ${clanName}`);
+        });
     }
 }

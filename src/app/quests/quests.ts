@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, WritableSignal, signal, Input } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal, signal, Input, effect } from '@angular/core';
 import { Card } from './card/card';
 import { QuestsService } from '../quests.service';
 import { Quest } from '../modules';
@@ -49,9 +49,11 @@ export class Quests {
         }
     }
 
-    ngOnInit() {
+    constructor() {
         // Initialize the writable signal from the input signal value
-        this.quests.set(this.questsData());
+        effect(() => {
+            this.quests.set(this.questsData());
+        });
         console.info("%c Quests component initialized", "color: white; padding: 15px; border: 1px solid green; background-color: green;");
     }
     ngOnDestroy() {

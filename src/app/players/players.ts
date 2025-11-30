@@ -25,8 +25,8 @@ export class Players {
         });
     }
 
-    handleDeletePlayer(username: string) {
-        this.playersService.deletePlayerByUsername(username);
+    handleDeletePlayer(id: string) {
+        this.playersService.deletePlayerById(id);
         this.playersData.set(this.playersService.getPlayers());
     }
 

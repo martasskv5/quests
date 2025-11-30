@@ -22,8 +22,8 @@ export class PlayersService {
             // After loading players, load clans for each player
             data.forEach((player) => {
                 if (player.clan) {
-                    const clan = this.clanService.getClanByName(player.clan as unknown as string);
                     console.log(this.clanService.getClans());
+                    const clan = this.clanService.getClanByName(player.clan as unknown as string);
                     
                     if (clan) {
                         console.log(
@@ -40,6 +40,11 @@ export class PlayersService {
 
     addPlayer(player: Player): void {
         this.players.update((list) => [...list, player]);
+
+        // update database
+        this.http.post<Player>(this.url, player).subscribe((data) => {
+            console.log('[PlayersService] added player', data);
+        });
     }
 
     getPlayers(): Player[] {
@@ -67,7 +72,11 @@ export class PlayersService {
         return level;
     }
 
-    deletePlayerByUsername(username: string): void {
-        this.players.update((list) => list.filter((player) => player.username !== username));
+    deletePlayerById(id: string): void {
+        this.players.update((list) => list.filter((player) => player.id !== id));
+        // update database
+        this.http.delete(`${this.url}/${id}`).subscribe(() => {
+            console.log('[PlayersService] deleted player with id', id);
+        });
     }
 }

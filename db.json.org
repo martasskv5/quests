@@ -59,6 +59,7 @@
                 {
                     "id": "019acb05-f7ff-783b-b459-8999ea2c3df2",
                     "completed": false
+                    
                 },
                 {
                     "id": "019acb06-057d-79b1-8596-dd50a3c7c92f",
@@ -69,12 +70,13 @@
     ],
     "clans": [
         {
-            "id": "019ad51c-a53a-77f3-8d52-1081e2a246d1",
             "name": "Warriors",
             "description": "A clan of brave warriors.",
             "capacity": 8,
             "profilePictureUrl": null,
-            "players": ["019acb0a-e611-77d6-ae74-eb13b6fccdfb"]
+            "players": [
+                "019acb0a-e611-77d6-ae74-eb13b6fccdfb"
+            ]
         }
     ]
 }

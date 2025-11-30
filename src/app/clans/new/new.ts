@@ -4,6 +4,7 @@ import { Clan } from '../../modules';
 import { ClanService } from '../../clans';
 import { RouterLink } from '@angular/router';
 import { form, Field, required, submit, min } from '@angular/forms/signals';
+import { v7 as uuidv7} from 'uuid';
 
 @Component({
     selector: 'app-clan-new',
@@ -16,6 +17,7 @@ export class ClanNew {
     clanService = inject(ClanService);
 
     clanModel = signal<Clan>({
+        id: uuidv7(),
         name: '',
         description: '',
         capacity: 10,
