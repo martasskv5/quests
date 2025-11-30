@@ -46,27 +46,45 @@ export class ClanService {
         });
     }
 
-    addPlayerToClan(clanName: string, player: any): void {
+    addPlayerToClan(clanId: string, playerId: string): void {
+        // Local update: ensure we store player id strings
         this.clansSignal.update((list) =>
-            list.map((clan) => (clan.name === clanName ? { ...clan, players: [...clan.players, player] } : clan))
+            list.map((clan) => (clan.id === clanId ? { ...clan, players: [...clan.players, playerId] } : clan))
         );
 
-        // update database
-        this.http.post(`${this.url}/${clanName}/players`, player).subscribe(() => {
-            console.log(`[ClanService] added player to clan: ${clanName}`);
+        // Server update: fetch clan by id, append player id, then PUT back
+        this.http.get<any>(`${this.url}/${clanId}`).subscribe((clanResource) => {
+            if (!clanResource) {
+                console.warn(`[ClanService] clan not found on server to add player: ${clanId}`);
+                return;
+            }
+            const updatedClan = { ...clanResource, players: [...(clanResource.players || []), playerId] };
+            this.http.put(`${this.url}/${clanId}`, updatedClan).subscribe(() => {
+                console.log(`[ClanService] added player to clan on server: ${clanId}`);
+            });
         });
     }
 
-    deletePlayerFromClan(clanName: string, playerId: string): void {
+    deletePlayerFromClan(clanId: string, playerId: string): void {
         this.clansSignal.update((list) =>
             list.map((clan) =>
-                clan.name === clanName ? { ...clan, players: clan.players.filter((p: any) => p.id !== playerId) } : clan
+                clan.id === clanId ? { ...clan, players: clan.players.filter((p: any) => p.id !== playerId) } : clan
             )
         );
 
-        // update database
-        this.http.delete(`${this.url}/${clanName}/players/${playerId}`).subscribe(() => {
-            console.log(`[ClanService] deleted player from clan: ${clanName}`);
+        // Server update: fetch clan by id, remove player id, then PUT back
+        this.http.get<any>(`${this.url}/${clanId}`).subscribe((clanResource) => {
+            if (!clanResource) {
+                console.warn(`[ClanService] clan not found on server to delete player: ${clanId}`);
+                return;
+            }
+            const updatedPlayers = (clanResource.players || []).filter((p: any) =>
+                typeof p === 'string' ? p !== playerId : p.id !== playerId
+            );
+            const updatedClan = { ...clanResource, players: updatedPlayers };
+            this.http.put(`${this.url}/${clanId}`, updatedClan).subscribe(() => {
+                console.log(`[ClanService] deleted player ${playerId} from clan on server: ${clanId}`);
+            });
         });
     }
 }

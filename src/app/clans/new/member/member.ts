@@ -48,6 +48,6 @@ export class NewMember {
         }
 
         // Call the service to add the new player
-        this.clanService.addPlayerToClan(this.clan!.name, newMember);
+        this.clanService.addPlayerToClan(this.clan!.id, newMember.id);
     }
 }

@@ -84,3 +84,8 @@
 
 ### 20
 - [x] Implement search functionality for clans based on clan name.
+
+---
+
+### 23
+- [ ] Fix local updates when deleting players from clans.

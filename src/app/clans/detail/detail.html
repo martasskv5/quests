@@ -13,9 +13,9 @@
                 role="button"
                 tabindex="0"
                 aria-label="Delete quest"
-                (click)="handleDelete(member.username)"
-                (keydown.enter)="handleDelete(member.username)"
-                (keydown.space)="$event.preventDefault(); handleDelete(member.username)"
+                (click)="handleDelete(member.id)"
+                (keydown.enter)="handleDelete(member.id)"
+                (keydown.space)="$event.preventDefault(); handleDelete(member.id)"
             >
                 🗑️
             </div>

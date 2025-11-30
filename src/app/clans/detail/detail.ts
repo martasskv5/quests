@@ -31,7 +31,7 @@ export class ClanDetail {
         }
     }
 
-    handleDelete(playerName: string) {
-        this.clanService.deletePlayerFromClan(this.clan!.name, playerName);
+    handleDelete(playerId: string) {
+        this.clanService.deletePlayerFromClan(this.clan!.id, playerId);
     }
 }
