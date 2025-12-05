@@ -1,7 +1,9 @@
-import { Injectable, inject, signal, WritableSignal } from '@angular/core';
+import { Injectable, inject, signal, WritableSignal, effect } from '@angular/core';
 import { Player, playerLevels, PlayerLevel } from './modules';
-import { HttpClient } from '@angular/common/http';
+import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import { ClanService } from './clans';
+import { FirestoreService } from './firestoreAPI';
+import { from } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -9,42 +11,52 @@ import { ClanService } from './clans';
 export class PlayersService {
     private players: WritableSignal<Player[]> = signal([]);
     private clanService = inject(ClanService);
-    url = 'http://localhost:3000/players';
-    private http = inject(HttpClient);
+    private firestore = inject(Firestore);
+    private firestoreService = inject(FirestoreService);
+    private readonly collectionName = 'players';
 
     constructor() {
         console.info(
             '%c PlayersService initialized',
             'color: white; padding: 15px; border: 1px solid green; background-color: green;'
         );
-        this.http.get<Player[]>(this.url).subscribe((data) => {
-            console.log('[PlayersService] loaded players', data);
-            // After loading players, load clans for each player
+        this.loadPlayers();
+    }
+
+    private loadPlayers(): void {
+        const playersData = this.firestoreService.loadCollection<Player>(this.collectionName);
+        this.players = playersData;
+        
+        // Watch for data changes and associate with clans
+        effect(() => {
+            const data = playersData();
             data.forEach((player) => {
                 if (player.clan) {
-                    console.log(this.clanService.getClans());
                     const clan = this.clanService.getClanByName(player.clan as unknown as string);
-                    
                     if (clan) {
                         console.log(
                             `[PlayersService] associating player ${player.username} with clan ${clan.name}`
                         );
-                        // Here you could add logic to associate the player with the clan if needed
                         player.clan = clan;
                     }
                 }
             });
-            this.players.set(data);
         });
     }
 
     addPlayer(player: Player): void {
         this.players.update((list) => [...list, player]);
 
-        // update database
-        this.http.post<Player>(this.url, player).subscribe((data) => {
-            console.log('[PlayersService] added player', data);
-        });
+        this.firestoreService.addDocument(this.collectionName, player).then(
+            (id) => {
+                console.log('[PlayersService] added player with id:', id);
+                this.loadPlayers();
+            },
+            (error) => {
+                console.error('[PlayersService] error adding player:', error);
+                this.loadPlayers();
+            }
+        );
     }
 
     getPlayers(): Player[] {
@@ -74,9 +86,15 @@ export class PlayersService {
 
     deletePlayerById(id: string): void {
         this.players.update((list) => list.filter((player) => player.id !== id));
-        // update database
-        this.http.delete(`${this.url}/${id}`).subscribe(() => {
-            console.log('[PlayersService] deleted player with id', id);
-        });
+
+        this.firestoreService.deleteDocument(this.collectionName, id).then(
+            () => {
+                console.log('[PlayersService] deleted player with id:', id);
+            },
+            (error) => {
+                console.error('[PlayersService] error deleting player:', error);
+                this.loadPlayers();
+            }
+        );
     }
-}
+};

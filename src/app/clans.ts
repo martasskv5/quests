@@ -1,6 +1,8 @@
 import { Injectable, inject, signal, WritableSignal } from '@angular/core';
 import { Clan } from './modules';
-import { HttpClient } from '@angular/common/http';
+import { Firestore, collection, getDocs, doc } from '@angular/fire/firestore';
+import { from } from 'rxjs';
+import { FirestoreService } from './firestoreAPI';
 
 @Injectable({
     providedIn: 'root',
@@ -8,25 +10,33 @@ import { HttpClient } from '@angular/common/http';
 export class ClanService {
     // avoid injecting PlayersService here to prevent a circular dependency
     // initial data should not reference PlayersService directly
-    private http = inject(HttpClient);
-    // store clans in a signal so consumers can react when the HTTP load finishes
+    private firestoreService = inject(FirestoreService);
     private clansSignal: WritableSignal<Clan[]> = signal([]);
-    url = 'http://localhost:3000/clans';
+    private readonly collectionName = 'clans';
 
     constructor() {
-        this.http.get<Clan[]>(this.url).subscribe((data) => {
-            console.log('[ClanService] loaded clans', data);
-            this.clansSignal.set(data);
-        });
+        this.loadClans();
     }
+
+    private loadClans(): void {
+        const clansData = this.firestoreService.loadCollection<Clan>(this.collectionName);
+        this.clansSignal = clansData;
+    }
+    
 
     addClan(clan: Clan): void {
         this.clansSignal.update((list) => [...list, clan]);
 
-        // updata database
-        this.http.post<Clan>(this.url, clan).subscribe((data) => {
-            console.log('[ClanService] added clan', data);
-        });
+        this.firestoreService.addDocument(this.collectionName, clan).then(
+            (id) => {
+                console.log('[ClanService] added clan with id:', id);
+                this.loadClans();
+            },
+            (error) => {
+                console.error('[ClanService] error adding clan:', error);
+                this.loadClans();
+            }
+        );
     }
 
     getClans(): Clan[] {
@@ -40,10 +50,15 @@ export class ClanService {
     deleteClanById(id: string): void {
         this.clansSignal.update((list) => list.filter((clan) => clan.id !== id));
 
-        // update database
-        this.http.delete(`${this.url}/${id}`).subscribe(() => {
-            console.log(`[ClanService] deleted clan with id: ${id}`);
-        });
+        this.firestoreService.deleteDocument(this.collectionName, id).then(
+            () => {
+                console.log(`[ClanService] deleted clan with id: ${id}`);
+            },
+            (error: any) => {
+                console.error('[ClanService] error deleting clan:', error);
+                this.loadClans();
+            }
+        );
     }
 
     addPlayerToClan(clanId: string, playerId: string): void {
@@ -52,39 +67,45 @@ export class ClanService {
             list.map((clan) => (clan.id === clanId ? { ...clan, players: [...clan.players, playerId] } : clan))
         );
 
-        // Server update: fetch clan by id, append player id, then PUT back
-        this.http.get<any>(`${this.url}/${clanId}`).subscribe((clanResource) => {
-            if (!clanResource) {
-                console.warn(`[ClanService] clan not found on server to add player: ${clanId}`);
-                return;
-            }
-            const updatedClan = { ...clanResource, players: [...(clanResource.players || []), playerId] };
-            this.http.put(`${this.url}/${clanId}`, updatedClan).subscribe(() => {
-                console.log(`[ClanService] added player to clan on server: ${clanId}`);
-            });
-        });
+        // Server update: fetch clan, append player id, then update
+        const clan = this.clansSignal().find((c) => c.id === clanId);
+        if (clan) {
+            this.firestoreService.updateDocument(this.collectionName, clanId, { 
+                players: [...clan.players, playerId] 
+            }).then(
+                () => {
+                    console.log(`[ClanService] added player to clan on server: ${clanId}`);
+                },
+                (error: any) => {
+                    console.error('[ClanService] error adding player to clan:', error);
+                    this.loadClans();
+                }
+            );
+        }
     }
 
     deletePlayerFromClan(clanId: string, playerId: string): void {
         this.clansSignal.update((list) =>
             list.map((clan) =>
-                clan.id === clanId ? { ...clan, players: clan.players.filter((p: any) => p.id !== playerId) } : clan
+                clan.id === clanId ? { ...clan, players: clan.players.filter((p: any) => p !== playerId) } : clan
             )
         );
 
-        // Server update: fetch clan by id, remove player id, then PUT back
-        this.http.get<any>(`${this.url}/${clanId}`).subscribe((clanResource) => {
-            if (!clanResource) {
-                console.warn(`[ClanService] clan not found on server to delete player: ${clanId}`);
-                return;
-            }
-            const updatedPlayers = (clanResource.players || []).filter((p: any) =>
-                typeof p === 'string' ? p !== playerId : p.id !== playerId
+        // Server update: fetch clan, remove player id, then update
+        const clan = this.clansSignal().find((c) => c.id === clanId);
+        if (clan) {
+            const updatedPlayers = clan.players.filter((p: any) => p !== playerId);
+            this.firestoreService.updateDocument(this.collectionName, clanId, { 
+                players: updatedPlayers 
+            }).then(
+                () => {
+                    console.log(`[ClanService] deleted player ${playerId} from clan on server: ${clanId}`);
+                },
+                (error: any) => {
+                    console.error('[ClanService] error deleting player from clan:', error);
+                    this.loadClans();
+                }
             );
-            const updatedClan = { ...clanResource, players: updatedPlayers };
-            this.http.put(`${this.url}/${clanId}`, updatedClan).subscribe(() => {
-                console.log(`[ClanService] deleted player ${playerId} from clan on server: ${clanId}`);
-            });
-        });
+        }
     }
 }

@@ -41,5 +41,13 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Firebase
+.firebaserc
+firebase-debug.log
+firestore-debug.log
+.runtimeconfig.json
+-firebase/
 
 zadanie.md
+
+service-account.json
