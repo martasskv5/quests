@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, WritableSignal, signal, Input, effect } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal, signal, effect } from '@angular/core';
 import { Card } from './card/card';
 import { QuestsService } from '../quests.service';
 import { Quest } from '../modules';
@@ -15,8 +15,6 @@ import { Search } from '../search/search';
 })
 export class Quests {
     questsService = inject(QuestsService);
-    @Input() questsData: Signal<Quest[]> = signal(this.questsService.getQuests());
-
 
     // Use a writable local signal so we can call update() on it
     quests: WritableSignal<Quest[]> = signal([]);
@@ -50,9 +48,10 @@ export class Quests {
     }
 
     constructor() {
-        // Initialize the writable signal from the input signal value
+        // Watch the service signal and sync it to our local signal
         effect(() => {
-            this.quests.set(this.questsData());
+            const questsFromService = this.questsService.getQuests();
+            this.quests.set(questsFromService);
         });
         console.info("%c Quests component initialized", "color: white; padding: 15px; border: 1px solid green; background-color: green;");
     }
