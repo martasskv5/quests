@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, Signal, WritableSignal } from '@angular/core';
+import { Injectable, inject, signal, WritableSignal } from '@angular/core';
 import {
     Firestore,
     collection,
@@ -7,7 +7,6 @@ import {
     deleteDoc,
     doc,
     updateDoc,
-    setDoc,
 } from '@angular/fire/firestore';
 import { from } from 'rxjs';
 
@@ -29,6 +28,34 @@ export class FirestoreService {
             data.set(docs);
         });
         return data;
+    }
+
+    /**
+     * Load a collection and hydrate a named subcollection for each document.
+     * Useful when migrating from json-server structures where nested arrays were split into subcollections.
+     */
+    async loadCollectionWithSubcollection<T extends { id?: string }, S>(
+        collectionName: string,
+        subcollectionName: string
+    ): Promise<(T & { [key: string]: S[] })[]> {
+        const coll = collection(this.firestore, collectionName);
+        const snapshot = await getDocs(coll);
+
+        const results: (T & { [key: string]: S[] })[] = [];
+        for (const docSnap of snapshot.docs) {
+            const base: any = { id: docSnap.id, ...docSnap.data() };
+            const subColl = collection(this.firestore, `${collectionName}/${docSnap.id}/${subcollectionName}`);
+            const subSnap = await getDocs(subColl);
+            base[subcollectionName] = subSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as S[];
+            results.push(base as T & { [key: string]: S[] });
+        }
+
+        console.log(
+            `[FirestoreService] loaded ${collectionName} with subcollection ${subcollectionName}:`,
+            results
+        );
+
+        return results;
     }
 
     addDocument<T extends { id?: string }>(collectionName: string, data: T): Promise<string> {

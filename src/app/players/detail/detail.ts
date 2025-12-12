@@ -16,7 +16,7 @@ export class Detail {
     playerService: PlayersService = inject(PlayersService);
     questsService: QuestsService = inject(QuestsService);
 
-    player: Player;
+    player: Player | null = null;
     playerLevel: string = '';
     playerNextLevel: number = 0;
     playerQuests: WritableSignal<Quest[]> = signal([]);
@@ -24,20 +24,35 @@ export class Detail {
     inProgressQuests: WritableSignal<Quest[]> = signal([]);
     constructor() {
         const username = this.route.snapshot.paramMap.get('username');
-        this.player = this.playerService.getPlayerByUsername(String(username));
-        this.playerLevel = this.playerService.getPlayerLevel(this.player.username).title;
-        this.playerNextLevel = this.getNextLevel().xpRequired - this.player.xp;
+        const found = this.playerService.getPlayerByUsername(String(username));
+
+        // Guard: player data may not be ready yet; avoid runtime errors
+        if (!found) {
+            console.warn('[player-detail] player not found yet, showing loading state');
+            return;
+        }
+
+        // Normalize questsList so downstream code can safely call array methods
+        const normalizedPlayer: Player = {
+            ...found,
+            questsList: Array.isArray(found.questsList) ? found.questsList : [],
+        };
+
+        this.player = normalizedPlayer;
+        this.playerLevel = this.playerService.getPlayerLevel(normalizedPlayer.username).title;
+        this.playerNextLevel = this.getNextLevel().xpRequired - normalizedPlayer.xp;
 
         // Load quests for the player
         const allQuests = this.questsService.getQuests();
         // Keep only quests that are assigned to the player (produces Quest[])
+        const playerQuestRefs = normalizedPlayer.questsList;
         const playerQuests = allQuests.filter((quest) =>
-            this.player.questsList.some((q) => q.id === quest.id)
+            playerQuestRefs.some((q) => q.id === quest.id)
         );
 
         // update quests status based on player's questsList
         playerQuests.forEach((quest) => {
-            const playerQuest = this.player.questsList.find((q) => q.id === quest.id);
+            const playerQuest = playerQuestRefs.find((q) => q.id === quest.id);
             if (playerQuest) {
                 quest.completed = playerQuest.completed;
             }
@@ -56,6 +71,10 @@ export class Detail {
     }
 
     completeQuest(id: string) {
+        if (!this.player) {
+            return;
+        }
+
         console.log('[player-detail] completeQuest called with id:', id);
 
         // Immutable update: create new quest objects and replace the list
@@ -90,6 +109,10 @@ export class Detail {
     }
 
     deleteQuest(id: string) {
+        if (!this.player) {
+            return;
+        }
+
         console.log('[player-detail] deleteQuest called with id:', id);
         const updated = this.player.questsList.filter((q) => q.id !== id);
         this.player.questsList = updated;
@@ -104,6 +127,10 @@ export class Detail {
     }
 
     getNextLevel(): PlayerLevel {
+        if (!this.player) {
+            return playerLevels[0];
+        }
+
         const currentLevel = this.playerService.getPlayerLevel(this.player.username);
         const currentLevelIndex = playerLevels.findIndex(
             (level) => level.title === currentLevel.title

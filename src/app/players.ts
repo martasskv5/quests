@@ -1,9 +1,7 @@
-import { Injectable, inject, signal, WritableSignal, effect } from '@angular/core';
-import { Player, playerLevels, PlayerLevel } from './modules';
-import { Firestore, collection, getDocs } from '@angular/fire/firestore';
+import { Injectable, inject, signal, WritableSignal } from '@angular/core';
+import { Player, playerLevels, PlayerLevel, Quest } from './modules';
 import { ClanService } from './clans';
 import { FirestoreService } from './firestoreAPI';
-import { from } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +9,6 @@ import { from } from 'rxjs';
 export class PlayersService {
     private players: WritableSignal<Player[]> = signal([]);
     private clanService = inject(ClanService);
-    private firestore = inject(Firestore);
     private firestoreService = inject(FirestoreService);
     private readonly collectionName = 'players';
 
@@ -23,25 +20,28 @@ export class PlayersService {
         this.loadPlayers();
     }
 
-    private loadPlayers(): void {
-        const playersData = this.firestoreService.loadCollection<Player>(this.collectionName);
-        this.players = playersData;
-        
-        // Watch for data changes and associate with clans
-        effect(() => {
-            const data = playersData();
-            data.forEach((player) => {
-                if (player.clan) {
-                    const clan = this.clanService.getClanByName(player.clan as unknown as string);
-                    if (clan) {
-                        console.log(
-                            `[PlayersService] associating player ${player.username} with clan ${clan.name}`
-                        );
-                        player.clan = clan;
-                    }
+    private async loadPlayers(): Promise<void> {
+        const playersWithQuests = await this.firestoreService.loadCollectionWithSubcollection<Player, Quest>(
+            this.collectionName,
+            'questsList'
+        );
+
+        playersWithQuests.forEach((player) => {
+            if (!Array.isArray(player.questsList)) {
+                (player as any).questsList = [];
+            }
+            if (player.clan) {
+                const clan = this.clanService.getClanByName(player.clan as unknown as string);
+                if (clan) {
+                    console.log(
+                        `[PlayersService] associating player ${player.username} with clan ${clan.name}`
+                    );
+                    player.clan = clan;
                 }
-            });
+            }
         });
+
+        this.players.set(playersWithQuests);
     }
 
     addPlayer(player: Player): void {
