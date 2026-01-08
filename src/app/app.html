@@ -4,9 +4,20 @@
             <img src="{{ header_logo }}" alt="" />
             <h1>{{ header }}</h1>
         </div>
-        <a [routerLink]="[`quests`]">Quests</a>
-        <a [routerLink]="[`players`]">Players</a>
-        <a [routerLink]="[`clans`]">Clans</a>
+        @if (isAuthenticated()) {
+        <div>
+            <a [routerLink]="[`quests`]">Quests</a>
+            <a [routerLink]="[`players`]">Players</a>
+            <a [routerLink]="[`clans`]">Clans</a>
+        </div>
+        <div class="left">
+            <a (click)="logout()">Log Out</a>
+        </div>
+        } @else {
+        <div class="left">
+            <a [routerLink]="[`login`]">Login</a>
+        </div>
+        }
         <!-- <app-search></app-search> -->
     </header>
     <router-outlet></router-outlet>

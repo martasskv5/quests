@@ -1,0 +1,25 @@
+<main>
+    <h1>Login</h1>
+
+<form class="form" (submit)="login($event)" novalidate>
+    <label for="email">Email</label>
+    <input id="email" type="email" [field]="loginForm.email">
+
+    @if (loginForm.email().invalid() && loginForm.email().touched()) {
+        @for (error of loginForm.email().errors(); track error.kind) {
+            <div class="error">{{ error.message }}</div>
+        }
+    }
+
+    <label for="password">Password</label>
+    <input id="password" type="password" [field]="loginForm.password">
+
+    @if (loginForm.password().invalid() && loginForm.password().touched()) {
+        @for (error of loginForm.password().errors(); track error.kind) {
+            <div class="error">{{ error.message }}</div>
+        }
+    }
+    <button type="submit" [disabled]="loginForm().invalid()">Login</button>
+</form>
+
+</main>

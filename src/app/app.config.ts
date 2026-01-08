@@ -1,11 +1,12 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { getFirestore, provideFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
 import { routes } from './app.routes';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBOXxME5Jfde82fJWW6xAGcL4K0oVFXKI4',
+  apiKey: 'AIzaSyA6pbONeoBQ6ZCyyPVLYfThd2d_8bDqY8Q',
   authDomain: 'appslab-quests.firebaseapp.com',
   projectId: 'martas-appslab-quests',
   storageBucket: 'appslab-quests.firebasestorage.app',
@@ -19,6 +20,13 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (location.hostname === 'localhost') {
+        connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+      }
+      return auth;
+    }),
     provideFirestore(() => {
       const firestore = getFirestore();
       if (location.hostname === 'localhost') {
